@@ -1,0 +1,83 @@
+{
+    "Genes": [
+        {
+            "minValue": -10,
+            "geneDataType": "Integer",
+            "maxValue": 10,
+            "invalidValues": [
+                5.0,
+                10.0
+            ]
+        },
+        {
+            "minValue": -20,
+            "geneDataType": "Integer",
+            "maxValue": 20,
+            "invalidValues": [
+                5,
+                10
+            ]
+        },
+        {
+            "minValue": -30,
+            "geneDataType": "Integer",
+            "maxValue": 30,
+            "invalidValues": [
+                5,
+                10
+            ]
+        }
+    ],
+    "FitnessFunction": {
+        "Safety" : {
+            "enabled" : true,
+            "weight" : 1
+        },
+        "Livelyness" : {
+            "enabled" : true,
+            "weight" : 1
+        },
+        "SegFault" : {
+            "enabled" : true,
+            "weight" : 1
+        },
+        "Exceptions" : {
+            "enabled" : true,
+            "weight" : 1
+        },
+        "ExecutionTime" : {
+            "enabled" : true,
+            "weight" : 1,
+            "maxTime" : 3000
+        },
+        "IllegalOutput": {
+            "enabled" : true,
+            "weight" : 1,
+            "words" : []
+        },
+        "ExpectedOutput" : {
+            "enabled" : false,
+            "weight" : 1,
+            "constantExpected" : true,
+            "exactMatch" : true,
+            "filePath" : ""
+        },
+        "LTLWeight" : 0.5,
+        "MWeight" : 0.5,
+        "GWeight" : 0.5
+    },
+    "reproductionProp":0.5,
+    "crossoverProp":0.5,
+    "seed":0,
+    "mutationType":"BitWisInversion",
+    "selectionSize":10,
+    "populationSize":100,
+    "numGenerations":150,
+    "crossOverType":"OnePointCrossOver",
+    "mutationProp":0.5,
+    "nCrossOver":5,
+    "tournamentSize":5,
+    "interpreterPath" : "",
+    "interpreterCommand" : "java -jar ",
+    "interpreterOutputPath" : "output.json"
+}
