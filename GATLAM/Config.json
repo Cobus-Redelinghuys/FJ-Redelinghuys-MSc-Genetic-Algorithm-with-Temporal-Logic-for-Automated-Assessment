@@ -58,13 +58,8 @@
         "ExpectedOutput" : {
             "enabled" : false,
             "weight" : 1,
-            "constantExpected" : true,
-            "exactMatch" : true,
-            "filePath" : ""
-        },
-        "LTLWeight" : 0.5,
-        "MWeight" : 0.5,
-        "GWeight" : 0.5
+            "exactMatch" : true
+        }
     },
     "reproductionProp":0.5,
     "crossoverProp":0.5,
@@ -79,5 +74,8 @@
     "tournamentSize":5,
     "interpreterPath" : "",
     "interpreterCommand" : "java -jar ",
-    "interpreterOutputPath" : "output.json"
+    "interpreterOutputPath" : "output.json",
+    "LTLWeight" : 0.5,
+    "MWeight" : 0.5,
+    "GWeight" : 0.5
 }

@@ -23,7 +23,9 @@ public class Config {
     public static final String interpreterPath;
     public static final String interpreterCommand;
     public static final String interpreterOutputPath;
-
+    public static final double LTLWeight;
+    public static final double MWeight;
+    public static final double GWeight;
 
     static{
         JSONParser jsonParser = new JSONParser();
@@ -55,5 +57,8 @@ public class Config {
         interpreterPath = (String) jsonObject.get("interpreterPath");
         interpreterCommand = (String) jsonObject.get("interpreterCommand");
         interpreterOutputPath = (String) jsonObject.get("interpreterOutputPath");
+        LTLWeight = (double)jsonObject.get("LTLWeight");
+        MWeight = (double)jsonObject.get("MWeight");
+        GWeight = (double)jsonObject.get("GWeight");
     }
 }
