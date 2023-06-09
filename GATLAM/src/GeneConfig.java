@@ -24,7 +24,7 @@ class GeneConfig<T>{
     public GeneConfig(JSONObject jsonObject){
         Object res = null;
         try{
-            String line = (String)jsonObject.get("geneDataType");
+            String line = (String)jsonObject.get("geneDataType") + "GDT";
             for(GeneDataType geneDT: GeneDataType.values()){
                 if(geneDT.name().equals(line))
                     res = geneDT;
@@ -36,11 +36,11 @@ class GeneConfig<T>{
         }
 
         switch (geneDataType) {
-            case Integer:
+            case IntegerGDT:
                 dataType = Integer.class;
                 break;
                 
-            case Float:
+            case FloatGDT:
                 dataType = Float.class;
                 break;
 
@@ -86,7 +86,8 @@ class GeneConfig<T>{
         try{
             String line = (String)jsonObject.get("geneDataType");
             for(GeneDataType geneDT: GeneDataType.values()){
-                if(geneDT.name().equals(line))
+                String datatype = line + "GDT";
+                if(geneDT.name().equals(datatype))
                     res = geneDT;
             }
         } catch(Exception e){
@@ -94,10 +95,10 @@ class GeneConfig<T>{
         }
 
         switch (res) {
-            case Integer:
+            case IntegerGDT:
                 return new GeneConfig<Integer>(jsonObject);
                 
-            case Float:
+            case FloatGDT:
                 return new GeneConfig<Float>(jsonObject);
 
             default:
@@ -120,7 +121,7 @@ class GeneConfig<T>{
         while(notAllowed.contains(val)){
             val = geneDataType.randVal(maxValue, minValue);
         }
-        return geneDataType.convertToBinary(val);
+        return val.toString();
     }
 
     @SuppressWarnings("unchecked")
@@ -137,11 +138,14 @@ class GeneConfig<T>{
         return true;
     }
 
+    public String toBinaryString(String val){
+        return geneDataType.toBinaryString(val);
+    }
 }
 
 @SuppressWarnings("unchecked")
 enum GeneDataType{
-    Integer{
+    IntegerGDT{
         @Override
         public Integer convertFromBin(String str) {
             Long l = Long.parseLong(str, 2);
@@ -185,8 +189,14 @@ enum GeneDataType{
         public Integer convert(java.lang.Boolean val) throws IncorrectValueException {
             throw new IncorrectValueException(val, this);
         }
+
+        @Override
+        String toBinaryString(String val) {
+            Integer integerVal = Integer.parseInt(val);
+            return convertToBinary(integerVal);
+        }
     },
-    Float{
+    FloatGDT{
         @Override
         public Float convertFromBin(String str) {
             int v = java.lang.Integer.parseInt(str,2);
@@ -205,8 +215,8 @@ enum GeneDataType{
 
         @Override
         public String convertToBinary(Object val) {
-            int v = java.lang.Float.floatToIntBits((Float)val);
-            return pad(Integer.convertToBinary(v), numBits());
+            int v = Float.floatToIntBits((Float)val);
+            return pad(IntegerGDT.convertToBinary(v), numBits());
         }
 
         @Override
@@ -230,8 +240,14 @@ enum GeneDataType{
         public Float convert(java.lang.Boolean val) throws IncorrectValueException {
             throw new IncorrectValueException(val, this);
         }
+
+        @Override
+        String toBinaryString(String val) {
+            Float floatVal = Float.parseFloat(val);
+            return convertToBinary(floatVal);
+        }
     },
-    Double{
+    DoubleGDT{
         @Override
         public Double convertFromBin(String str) {
             String temp = "0" + str.substring(1);
@@ -276,6 +292,12 @@ enum GeneDataType{
         @Override
         public Double convert(java.lang.Boolean val) throws IncorrectValueException {
             throw new IncorrectValueException(val, this);
+        }
+
+        @Override
+        String toBinaryString(String val) {
+            Double doubleVal = Double.parseDouble(val);
+            return convertToBinary(doubleVal);
         }
     };
 
@@ -336,4 +358,6 @@ enum GeneDataType{
         }
         return temp;
     }
+
+    abstract String toBinaryString(String val);
 }

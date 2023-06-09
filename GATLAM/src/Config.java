@@ -8,7 +8,7 @@ import org.json.simple.parser.JSONParser;
 @SuppressWarnings("rawtypes")
 public class Config {
     static final GeneConfig[] genes; 
-    static final Random random = new Random();
+    static final Random random;
     public static final double reproductionProp;
     public static final double crossoverProp;
     public static final int seed;
@@ -60,5 +60,6 @@ public class Config {
         LTLWeight = (double)jsonObject.get("LTLWeight");
         MWeight = (double)jsonObject.get("MWeight");
         GWeight = (double)jsonObject.get("GWeight");
+        random = new Random(seed);
     }
 }
