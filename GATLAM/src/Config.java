@@ -5,7 +5,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-@SuppressWarnings("rawtypes")
 public class Config {
     static final GeneConfig[] genes; 
     static final Random random;
@@ -26,6 +25,9 @@ public class Config {
     public static final double LTLWeight;
     public static final double MWeight;
     public static final double GWeight;
+    public static final int maxCrossOverAttempts;
+
+    public static final CrossOver crossOver;
 
     static{
         JSONParser jsonParser = new JSONParser();
@@ -61,5 +63,7 @@ public class Config {
         MWeight = (double)jsonObject.get("MWeight");
         GWeight = (double)jsonObject.get("GWeight");
         random = new Random(seed);
+        maxCrossOverAttempts = ((Long)jsonObject.get("maxCrossOverAttempts")).intValue();
+        crossOver = CrossOver.getCrossOver(crossOverType);
     }
 }

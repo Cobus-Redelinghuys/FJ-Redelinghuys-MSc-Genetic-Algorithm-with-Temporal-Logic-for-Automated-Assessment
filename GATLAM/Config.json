@@ -2,26 +2,23 @@
     "Genes": [
         {
             "minValue": -10,
-            "geneDataType": "Integer",
             "maxValue": 10,
-            "invalidValues": [
-                5.0,
-                10.0
-            ]
-        },
-        {
-            "minValue": -20,
-            "geneDataType": "Integer",
-            "maxValue": 20,
             "invalidValues": [
                 5,
                 10
             ]
         },
         {
-            "minValue": -30,
-            "geneDataType": "Integer",
-            "maxValue": 30,
+            "minValue": -10,
+            "maxValue": 10,
+            "invalidValues": [
+                5,
+                10
+            ]
+        },
+        {
+            "minValue": -10,
+            "maxValue": 10,
             "invalidValues": [
                 5,
                 10
@@ -77,5 +74,6 @@
     "interpreterOutputPath" : "output.json",
     "LTLWeight" : 0.5,
     "MWeight" : 0.5,
-    "GWeight" : 0.5
+    "GWeight" : 0.5,
+    "maxCrossOverAttempts" : 100
 }

@@ -5,147 +5,89 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 @SuppressWarnings("rawtypes")
-class GeneConfig<T>{
+class GeneConfig {
     public final GeneDataType geneDataType;
-    private final T maxValue;
-    private final T minValue;
-    public final T[] invalidValues;
+    private final Integer  maxValue;
+    private final Integer  minValue;
+    public final Integer[] invalidValues;
     public final Class dataType;
 
-    public T maxValue(){
+    public Integer  maxValue() {
         return maxValue;
     }
 
-    public T minValue(){
+    public Integer  minValue() {
         return minValue;
     }
-    
-    @SuppressWarnings("unchecked")
-    public GeneConfig(JSONObject jsonObject){
-        Object res = null;
-        try{
-            String line = (String)jsonObject.get("geneDataType") + "GDT";
-            for(GeneDataType geneDT: GeneDataType.values()){
-                if(geneDT.name().equals(line))
-                    res = geneDT;
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-        } finally{
-            geneDataType = (GeneDataType)res;
-        }
 
-        switch (geneDataType) {
-            case IntegerGDT:
-                dataType = Integer.class;
-                break;
-                
-            case FloatGDT:
-                dataType = Float.class;
-                break;
+    public GeneConfig(JSONObject jsonObject) {
+        geneDataType = GeneDataType.IntegerGDT;
 
-            default:
-                dataType = Double.class;
-                break;
-        }
-
-        try{
-            res = geneDataType.convert(jsonObject.get("maxValue"));
-        } catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            maxValue = (T)res;
-        }
-
-        try{
-            res = geneDataType.convert(jsonObject.get("minValue"));
-        } catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            minValue = (T)res;
-        }
+        dataType = Integer.class;
+        maxValue = ((Long)jsonObject.get("maxValue")).intValue();
+        minValue = ((Long)jsonObject.get("minValue")).intValue();
+        geneDataType.max = maxValue;
+        geneDataType.min = minValue;
 
         Object[] resArr = null;
-        try{
-            JSONArray temp = ((JSONArray)jsonObject.get("invalidValues"));
+        try {
+            JSONArray temp = ((JSONArray) jsonObject.get("invalidValues"));
             resArr = new Object[temp.size()];
-            for(int i=0; i < resArr.length; i++) {
+            for (int i = 0; i < resArr.length; i++) {
                 resArr[i] = temp.get(i);
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally{
-            invalidValues = (T[])resArr;
-        }
-
-    }
-
-
-    static GeneConfig getGeneConfig(JSONObject jsonObject){
-        GeneDataType res = null;
-        try{
-            String line = (String)jsonObject.get("geneDataType");
-            for(GeneDataType geneDT: GeneDataType.values()){
-                String datatype = line + "GDT";
-                if(geneDT.name().equals(datatype))
-                    res = geneDT;
+        } finally {
+            invalidValues = new Integer[resArr.length];
+            for (int i = 0; i < resArr.length; i++) {
+                invalidValues[i] = ((Long)resArr[i]).intValue();
             }
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-
-        switch (res) {
-            case IntegerGDT:
-                return new GeneConfig<Integer>(jsonObject);
-                
-            case FloatGDT:
-                return new GeneConfig<Float>(jsonObject);
-
-            default:
-                return new GeneConfig<Double>(jsonObject);
         }
     }
 
-    public T convertFromBin(String str){
-        T val = geneDataType.convertFromBin(str); 
+    static GeneConfig getGeneConfig(JSONObject jsonObject) {
+        return new GeneConfig(jsonObject);
+    }
+
+    public Integer  convertFromBin(String str) {
+        Integer  val = geneDataType.convertFromBin(str);
         return val;
     }
 
-    public int numBits(){
+    public int numBits() {
         return geneDataType.numBits();
     }
 
-    public String generateGene(){
-        T val = geneDataType.randVal(maxValue, minValue);
-        List<T> notAllowed = Arrays.asList(invalidValues);
-        while(notAllowed.contains(val)){
+    public Integer generateGene() {
+        Integer val = geneDataType.randVal(maxValue, minValue);
+        List<Integer> notAllowed = Arrays.asList(invalidValues);
+        while (notAllowed.contains(val)) {
             val = geneDataType.randVal(maxValue, minValue);
         }
-        return val.toString();
+        return val;
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean validate(T val){
-        Comparable<T> compVal = (Comparable<T>)val;
-        if(compVal.compareTo(minValue) < 0 || compVal.compareTo(maxValue) > 0)
+    public boolean validate(Integer val) {
+        Comparable<Integer> compVal = (Comparable<Integer>) val;
+        if (compVal.compareTo(minValue) < 0 || compVal.compareTo(maxValue) > 0)
             return false;
 
-        for(T inValid: invalidValues){
-            if(inValid.equals(val))
+        for (Integer inValid : invalidValues) {
+            if (inValid.equals(val))
                 return false;
         }
 
         return true;
     }
 
-    public String toBinaryString(String val){
+    public String toBinaryString(Integer val) {
         return geneDataType.toBinaryString(val);
     }
 }
 
-@SuppressWarnings("unchecked")
-enum GeneDataType{
-    IntegerGDT{
+enum GeneDataType {
+    IntegerGDT {
         @Override
         public Integer convertFromBin(String str) {
             Long l = Long.parseLong(str, 2);
@@ -154,20 +96,20 @@ enum GeneDataType{
 
         @Override
         public int numBits() {
-            return 32;
+            return Integer.SIZE - Integer.numberOfLeadingZeros(Math.max(Math.abs((Integer)min), Math.abs((Integer)max)) | 1);
         }
 
         @Override
         public Integer randVal(Object max, Object min) {
-            return Config.random.nextInt((Integer)max - (Integer)min) + (Integer)min;
+            return Config.random.nextInt((Integer) max - (Integer) min) + (Integer) min;
         }
 
         @Override
         public String convertToBinary(Object val) {
-            String temp = java.lang.Integer.toBinaryString((java.lang.Integer)val);
+            String temp = java.lang.Integer.toBinaryString((java.lang.Integer) val);
             return pad(temp, numBits());
-            //long l = java.lang.Integer.toUnsignedLong((java.lang.Integer)val);
-            //return Long.toBinaryString(l);
+            // long l = java.lang.Integer.toUnsignedLong((java.lang.Integer)val);
+            // return Long.toBinaryString(l);
         }
 
         @Override
@@ -191,173 +133,74 @@ enum GeneDataType{
         }
 
         @Override
-        String toBinaryString(String val) {
-            Integer integerVal = Integer.parseInt(val);
-            return convertToBinary(integerVal);
-        }
-    },
-    FloatGDT{
-        @Override
-        public Float convertFromBin(String str) {
-            int v = java.lang.Integer.parseInt(str,2);
-            return java.lang.Float.intBitsToFloat(v);
-        }
-
-        @Override
-        public int numBits() {
-            return 32;
-        }
-
-        @Override
-        public Float randVal(Object max, Object min) {
-            return (Float)min + ((Float)max - (Float)min) * Config.random.nextFloat();
-        }
-
-        @Override
-        public String convertToBinary(Object val) {
-            int v = Float.floatToIntBits((Float)val);
-            return pad(IntegerGDT.convertToBinary(v), numBits());
-        }
-
-        @Override
-        public Float convert(Long val) {
-            int v = val.intValue();
-            return (float)v;
-        }
-
-        @Override
-        public Float convert(java.lang.Double val) {
-            double v = val;
-            return (float)v;
-        }
-
-        @Override
-        public Float convert(String val) throws IncorrectValueException {
-            throw new IncorrectValueException(val, this);
-        }
-
-        @Override
-        public Float convert(java.lang.Boolean val) throws IncorrectValueException {
-            throw new IncorrectValueException(val, this);
-        }
-
-        @Override
-        String toBinaryString(String val) {
-            Float floatVal = Float.parseFloat(val);
-            return convertToBinary(floatVal);
-        }
-    },
-    DoubleGDT{
-        @Override
-        public Double convertFromBin(String str) {
-            String temp = "0" + str.substring(1);
-            Long v = Long.valueOf(temp, 2);
-            if(str.charAt(0) == '1')
-                return -1*java.lang.Double.longBitsToDouble(v);
-            return java.lang.Double.longBitsToDouble(v);
-        }
-
-        @Override
-        public int numBits() {
-            return 64;
-        }
-
-        @Override
-        public Double randVal(Object max, Object min) {
-            return (Double)min + ((Double)max - (Double)min) * Config.random.nextDouble();
-        }
-
-        @Override
-        public String convertToBinary(Object val) {
-            long v = java.lang.Double.doubleToLongBits((Double)val);
-            return pad(java.lang.Long.toBinaryString(v), numBits());
-        }
-
-        @Override
-        public Double convert(Long val) {
-            int v = val.intValue();
-            return (double)v;
-        }
-
-        @Override
-        public Double convert(java.lang.Double val){
-            return val;
-        }
-
-        @Override
-        public Double convert(String val) throws IncorrectValueException {
-            throw new IncorrectValueException(val, this);
-        }
-
-        @Override
-        public Double convert(java.lang.Boolean val) throws IncorrectValueException {
-            throw new IncorrectValueException(val, this);
-        }
-
-        @Override
-        String toBinaryString(String val) {
-            Double doubleVal = Double.parseDouble(val);
-            return convertToBinary(doubleVal);
+        String toBinaryString(Integer val) {
+            return convertToBinary(val);
         }
     };
 
-    public abstract <T> T convertFromBin(String str);
+    Object max;
+    Object min;
+
+    public abstract <T> Integer  convertFromBin(String str);
 
     public abstract int numBits();
 
-    public abstract <T> T randVal(Object max, Object min);
+    public abstract <T> Integer  randVal(Object max, Object min);
 
     public abstract String convertToBinary(Object val);
 
-    public abstract <T> T convert(Long val) throws IncorrectValueException;
+    public abstract <T> Integer  convert(Long val) throws IncorrectValueException;
 
-    public abstract <T> T convert(Double val) throws IncorrectValueException;
+    public abstract <T> Integer  convert(Double val) throws IncorrectValueException;
 
-    public abstract <T> T convert(String val) throws IncorrectValueException;
+    public abstract <T> Integer  convert(String val) throws IncorrectValueException;
 
-    public abstract <T> T convert(Boolean val) throws IncorrectValueException;
+    public abstract <T> Integer  convert(Boolean val) throws IncorrectValueException;
 
-    public <T> T convert(Object val) throws IncorrectValueException{
-        if(val instanceof Long)
-            return convert((Long)val);
-        if(val instanceof java.lang.Double)
-            return convert((java.lang.Double)val);
-        if(val instanceof String)
-            return convert((String)val);
-        if(val instanceof Boolean)
-            return convert((Boolean)val);
+    public <T> Integer  convert(Object val) throws IncorrectValueException {
+        if (val instanceof Long)
+            return convert((Long) val);
+        if (val instanceof java.lang.Double)
+            return convert((java.lang.Double) val);
+        if (val instanceof String)
+            return convert((String) val);
+        if (val instanceof Boolean)
+            return convert((Boolean) val);
         throw new IncorrectValueException(val, this);
     }
 
-    class IncorrectValueException extends Exception{
-        public IncorrectValueException(Long val, GeneDataType geneDataType){
+    class IncorrectValueException extends Exception {
+        public IncorrectValueException(Long val, GeneDataType geneDataType) {
             super("Incorrect value: " + val + " for type: " + geneDataType.name());
         }
 
-        public IncorrectValueException(Double val, GeneDataType geneDataType){
+        public IncorrectValueException(Double val, GeneDataType geneDataType) {
             super("Incorrect value: " + val.toString() + " for type: " + geneDataType.name());
         }
 
-        public IncorrectValueException(String val, GeneDataType geneDataType){
+        public IncorrectValueException(String val, GeneDataType geneDataType) {
             super("Incorrect value: " + val + " for type: " + geneDataType.name());
         }
 
-        public IncorrectValueException(Boolean val, GeneDataType geneDataType){
+        public IncorrectValueException(Boolean val, GeneDataType geneDataType) {
             super("Incorrect value: " + val + " for type: " + geneDataType.name());
         }
 
-        public IncorrectValueException(Object val, GeneDataType geneDataType){
+        public IncorrectValueException(Object val, GeneDataType geneDataType) {
             super("Incorrect value: " + val + " for type: " + geneDataType.name());
         }
     }
 
-    private static String pad(String str, int numBits){
+    private static String pad(String str, int numBits) {
         String temp = str;
-        while(temp.length() < numBits){
-            temp = "0" + temp; 
+        if(str.length() > numBits){
+            return str.substring(str.length()-numBits);
+        }
+        while (temp.length() < numBits) {
+            temp = "0" + temp;
         }
         return temp;
     }
 
-    abstract String toBinaryString(String val);
+    abstract String toBinaryString(Integer val);
 }
