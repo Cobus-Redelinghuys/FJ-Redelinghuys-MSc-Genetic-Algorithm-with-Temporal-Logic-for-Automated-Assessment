@@ -61,7 +61,7 @@
     "reproductionProp":0.5,
     "crossoverProp":0.5,
     "seed":0,
-    "mutationType":"SingleBitInversion",
+    "mutationType":"RandomInversion",
     "selectionSize":10,
     "populationSize":100,
     "numGenerations":150,
@@ -76,5 +76,6 @@
     "MWeight" : 0.5,
     "GWeight" : 0.5,
     "maxCrossOverAttempts" : 100,
-    "maxMutationAttempts" : 100
+    "maxMutationAttempts" : 100,
+    "nMutation":5
 }

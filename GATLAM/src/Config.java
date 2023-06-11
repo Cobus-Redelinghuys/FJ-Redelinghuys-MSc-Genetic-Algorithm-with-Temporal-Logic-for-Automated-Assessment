@@ -18,6 +18,7 @@ public class Config {
     public static final String crossOverType;
     public static final double mutationProp;
     public static final int nCrossOver;
+    public static final int nMutation;
     public static final int tournamentSize;
     public static final String interpreterPath;
     public static final String interpreterCommand;
@@ -69,5 +70,6 @@ public class Config {
         maxMutationAttempts = ((Long)jsonObject.get("maxMutationAttempts")).intValue();
         crossOver = CrossOver.getCrossOver(crossOverType);
         mutation = Mutation.getMutation(mutationType);
+        nMutation = ((Long) jsonObject.get("nMutation")).intValue();
     }
 }
