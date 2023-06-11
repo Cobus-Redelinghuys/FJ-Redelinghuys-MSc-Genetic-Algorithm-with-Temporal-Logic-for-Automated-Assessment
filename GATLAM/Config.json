@@ -65,7 +65,7 @@
     "selectionSize":10,
     "populationSize":100,
     "numGenerations":150,
-    "crossOverType":"SegmentedCrossOver",
+    "crossOverType":"UniformedCrossOver",
     "mutationProp":0.5,
     "nCrossOver":5,
     "tournamentSize":5,

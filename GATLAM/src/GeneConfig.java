@@ -69,12 +69,11 @@ class GeneConfig {
     }
 
     public boolean validate(Integer val) {
-        Comparable<Integer> compVal = (Comparable<Integer>) val;
-        if (compVal.compareTo(minValue) < 0 || compVal.compareTo(maxValue) > 0)
+        if (val < minValue || val > maxValue)
             return false;
 
         for (Integer inValid : invalidValues) {
-            if (inValid.equals(val))
+            if (inValid == val)
                 return false;
         }
 
