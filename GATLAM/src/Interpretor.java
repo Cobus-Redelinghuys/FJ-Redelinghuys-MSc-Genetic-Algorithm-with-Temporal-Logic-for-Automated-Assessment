@@ -1,30 +1,29 @@
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class Interpretor {
     public final String interpreterPath;
     public final String interpreterCommand;
-    public final String interpreterOutputPath;
     public final String interpretorExecutorName;
     public final int numberInterpreterInstances;
     public final File[] interpreterInstacePaths;
 
-    Interpretor(String path, String command, String outputPath, int nInstances, String executor)
+    Interpretor(String path, String command, int nInstances, String executor)
             throws RuntimeException {
         interpreterPath = path;
         interpreterCommand = command;
-        interpreterOutputPath = outputPath;
         numberInterpreterInstances = nInstances;
         interpretorExecutorName = executor;
         interpreterInstacePaths = new File[numberInterpreterInstances];
@@ -84,7 +83,7 @@ public class Interpretor {
         ArrayList<InterpretorInstance> finishedList = new ArrayList<>();
         for (Chromosome chromosome : chromosomes) {
             interpreterInstancesQueue
-                    .add(new InterpretorInstance(chromosome, interpreterCommand, interpreterOutputPath,
+                    .add(new InterpretorInstance(chromosome, interpreterCommand,
                             interpretorExecutorName));
         }
         InterpretorInstance[] instances = new InterpretorInstance[numberInterpreterInstances];
@@ -123,15 +122,13 @@ class InterpretorInstance extends Thread {
     final Chromosome chromosome;
     int instanceNumber;
     final String command;
-    final String outputPath;
     final String executor;
     JSONObject result;
     boolean done;
 
-    InterpretorInstance(Chromosome chromosome, String command, String outputPath, String executor) {
+    InterpretorInstance(Chromosome chromosome, String command, String executor) {
         this.chromosome = chromosome;
         this.command = command;
-        this.outputPath = outputPath;
         this.executor = executor;
     }
 
@@ -149,9 +146,16 @@ class InterpretorInstance extends Thread {
             done = true;
             return;
         } finally {
-
+            JSONParser jsonParser = new JSONParser();
+            Object obj = null;
+            try {
+                obj = jsonParser.parse(new FileReader("Interpretorinstances/Instance_" + instanceNumber + "/output.json"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            result = (JSONObject) obj;
+            done = true;
         }
-        done = true;
     }
 
     public static void runProgram(String str) throws Exception {

@@ -60,7 +60,6 @@ public class Config {
         tournamentSize = ((Long) jsonObject.get("tournamentSize")).intValue();
         String interpreterPath = (String) jsonObject.get("interpreterPath");
         String interpreterCommand = (String) jsonObject.get("interpreterCommand");
-        String interpreterOutputPath = (String) jsonObject.get("interpreterOutputPath");
         LTLWeight = (double) jsonObject.get("LTLWeight");
         MWeight = (double) jsonObject.get("MWeight");
         GWeight = (double) jsonObject.get("GWeight");
@@ -71,9 +70,9 @@ public class Config {
         mutation = Mutation.getMutation(mutationType);
         nMutation = ((Long) jsonObject.get("nMutation")).intValue();
         int numberInterpreterInstances = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
-        String interpretorExecutorName = (String)jsonObject.get("interpretorExecutorName");
+        String interpretorExecutorName = (String) jsonObject.get("interpretorExecutorName");
 
-        interpretor = new Interpretor(interpreterPath, interpreterCommand, interpreterOutputPath,
+        interpretor = new Interpretor(interpreterPath, interpreterCommand,
                 numberInterpreterInstances, interpretorExecutorName);
 
     }
