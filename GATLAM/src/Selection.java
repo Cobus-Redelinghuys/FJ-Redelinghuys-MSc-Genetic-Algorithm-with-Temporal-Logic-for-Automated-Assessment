@@ -1,6 +1,15 @@
 import java.util.HashSet;
 
 abstract public class Selection {
-    abstract Chromosome[] selectChromosomes(HashSet<Chromosome> population);
-    abstract Chromosome[] invSelectionChromosomes(HashSet<Chromosome> population);
+    abstract SelectionResult selectChromosomes(HashSet<Chromosome> population);
+}
+
+class SelectionResult{
+    final Chromosome[] winners;
+    final Chromosome[] loosers;
+
+    SelectionResult(Chromosome[] w, Chromosome[] l){
+        winners = w;
+        loosers = l;
+    }
 }
