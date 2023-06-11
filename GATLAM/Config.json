@@ -77,5 +77,6 @@
     "GWeight" : 0.5,
     "maxCrossOverAttempts" : 100,
     "maxMutationAttempts" : 100,
-    "nMutation":5
+    "nMutation":5,
+    "numberInterpreterInstances" : 5
 }

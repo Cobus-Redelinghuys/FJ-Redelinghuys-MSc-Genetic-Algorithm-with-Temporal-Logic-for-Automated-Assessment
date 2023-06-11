@@ -28,6 +28,7 @@ public class Config {
     public static final double GWeight;
     public static final int maxCrossOverAttempts;
     public static final int maxMutationAttempts;
+    public static final int numberInterpreterInstances;
 
     public static final CrossOver crossOver;
     public static final Mutation mutation;
@@ -71,5 +72,6 @@ public class Config {
         crossOver = CrossOver.getCrossOver(crossOverType);
         mutation = Mutation.getMutation(mutationType);
         nMutation = ((Long) jsonObject.get("nMutation")).intValue();
+        numberInterpreterInstances = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
     }
 }
