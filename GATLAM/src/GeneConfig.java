@@ -90,13 +90,32 @@ enum GeneDataType {
     IntegerGDT {
         @Override
         public Integer convertFromBin(String str) {
-            Long l = Long.parseLong(str, 2);
+            String sign = str.substring(0,1);
+            String subStr = str.substring(1);
+            Long l = Long.parseLong(subStr, 2);
+            if(sign.charAt(0) == '1'){
+                return -1*l.intValue();
+            } 
             return l.intValue();
         }
 
         @Override
         public int numBits() {
-            return Integer.SIZE - Integer.numberOfLeadingZeros(Math.max(Math.abs((Integer)min), Math.abs((Integer)max)) | 1);
+            int minVal = (int)min;
+            if((int)min < 0){
+                minVal *= -1;
+            }
+            int maxVal = (int)max;
+            if((int)maxVal < 0){
+                maxVal *= -1;
+            }
+            int minLength = Integer.toBinaryString(minVal).length();
+            int maxLength = Integer.toBinaryString(maxVal).length();
+            if(minLength > maxLength){
+                return minLength+1;
+            } else {
+                return maxLength+1;
+            }
         }
 
         @Override
@@ -106,8 +125,18 @@ enum GeneDataType {
 
         @Override
         public String convertToBinary(Object val) {
-            String temp = java.lang.Integer.toBinaryString((java.lang.Integer) val);
-            return pad(temp, numBits());
+            int iVal = (int)val;
+            if(iVal < 0){
+                iVal*= -1;
+            }
+            String temp = Integer.toBinaryString((Integer) iVal);
+            String padded = pad(temp, numBits()-1);
+            if((Integer)val < 0){
+                padded = "1" + padded;
+            } else {
+                padded = "0" + padded;
+            }
+            return padded;
             // long l = java.lang.Integer.toUnsignedLong((java.lang.Integer)val);
             // return Long.toBinaryString(l);
         }

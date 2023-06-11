@@ -1,24 +1,24 @@
 {
     "Genes": [
         {
-            "minValue": -10,
-            "maxValue": 10,
+            "minValue": -15,
+            "maxValue": 15,
             "invalidValues": [
                 5,
                 10
             ]
         },
         {
-            "minValue": -10,
-            "maxValue": 10,
+            "minValue": -15,
+            "maxValue": 15,
             "invalidValues": [
                 5,
                 10
             ]
         },
         {
-            "minValue": -10,
-            "maxValue": 10,
+            "minValue": -15,
+            "maxValue": 15,
             "invalidValues": [
                 5,
                 10
@@ -65,7 +65,7 @@
     "selectionSize":10,
     "populationSize":100,
     "numGenerations":150,
-    "crossOverType":"OnePointCrossOver",
+    "crossOverType":"NPointCrossOver",
     "mutationProp":0.5,
     "nCrossOver":5,
     "tournamentSize":5,

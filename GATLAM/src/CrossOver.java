@@ -1,15 +1,18 @@
 abstract public class CrossOver {
     abstract Chromosome[] crossOver(Chromosome chromosomeA, Chromosome chromosomeB);
 
-    static CrossOver getCrossOver(String type) throws RuntimeException{
-        if(type.equals("OnePointCrossOver")){
+    static CrossOver getCrossOver(String type) throws RuntimeException {
+        if (type.equals("OnePointCrossOver")) {
             return new OnePointCrossover();
+        }
+        if(type.equals("NPointCrossOver")){
+            return new NPointCrossover();
         }
         throw new RuntimeException("Invalid CrossOverType");
     }
 }
 
-class OnePointCrossover extends CrossOver{
+class OnePointCrossover extends CrossOver {
     @Override
     Chromosome[] crossOver(Chromosome chromosomeA, Chromosome chromosomeB) {
         Chromosome[] result = new Chromosome[2];
@@ -17,15 +20,42 @@ class OnePointCrossover extends CrossOver{
         String chromosomeBBits = chromosomeB.bits;
         for (int i = 0; i < Config.maxCrossOverAttempts; i++) {
             int crossOverPoint = Config.random.nextInt(chromosomeABits.length());
-            String nOffSpringA = chromosomeABits.substring(0, crossOverPoint) + chromosomeBBits.substring(crossOverPoint);
-            String nOffSpringB = chromosomeBBits.substring(0, crossOverPoint) + chromosomeABits.substring(crossOverPoint);
+            String nOffSpringA = chromosomeABits.substring(0, crossOverPoint)
+                    + chromosomeBBits.substring(crossOverPoint);
+            String nOffSpringB = chromosomeBBits.substring(0, crossOverPoint)
+                    + chromosomeABits.substring(crossOverPoint);
             result[0] = new Chromosome(nOffSpringA);
             result[1] = new Chromosome(nOffSpringB);
-            if(!result[0].isValid() || !result[1].isValid()){
+            if (!result[0].isValid() || !result[1].isValid()) {
                 result[0] = null;
                 result[1] = null;
             } else {
                 return result;
+            }
+        }
+
+        result[0] = new Chromosome(chromosomeA);
+        result[1] = new Chromosome(chromosomeB);
+        return result;
+    }
+}
+
+class NPointCrossover extends CrossOver {
+    @Override
+    Chromosome[] crossOver(Chromosome chromosomeA, Chromosome chromosomeB) {
+        Chromosome[] result = new Chromosome[2];
+        result[0] = new Chromosome(chromosomeA);
+        result[1] = new Chromosome(chromosomeB);
+        CrossOver onePointCrossOver = new OnePointCrossover();
+        for (int i = 0; i < Config.maxCrossOverAttempts; i++) {
+            for (int j = 0; j < Config.nCrossOver; j++) {
+                result = onePointCrossOver.crossOver(result[0], result[1]);
+            }
+            if (result[0].isValid() && result[1].isValid()) {
+                return result;
+            } else {
+                result[0] = new Chromosome(chromosomeA);
+                result[1] = new Chromosome(chromosomeB);
             }
         }
 
