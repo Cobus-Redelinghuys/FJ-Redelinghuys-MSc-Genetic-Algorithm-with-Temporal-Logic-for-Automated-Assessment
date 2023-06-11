@@ -55,7 +55,8 @@
         "ExpectedOutput" : {
             "enabled" : false,
             "weight" : 1,
-            "exactMatch" : true
+            "exactMatch" : true,
+            "splittingChar" : "\n"
         }
     },
     "reproductionProp":0.5,

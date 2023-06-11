@@ -183,3 +183,25 @@ class InterpretorInstance extends Thread {
     }
 
 }
+
+class InterpretorResults{
+    final String studentStdOut;
+    final String studentErrOut;
+    final String instructorStdOut;
+    final String instructorErrOut;
+    final long studentExeTime;
+    final long instructorExeTime;
+    final int studentExitCode;
+    final int instructorExitCode;
+
+    InterpretorResults(JSONObject output){
+        studentStdOut = (String)output.get("studentStdOut");
+        studentErrOut = (String)output.get("studentErrOut");
+        instructorStdOut = (String)output.get("instructorStdOut");
+        instructorErrOut = (String)output.get("instructorErrOut");
+        studentExeTime = (Long)output.get("studentExeTime");
+        instructorExeTime = (Long)output.get("instructorExeTime");
+        studentExitCode = ((Long)output.get("studentExitCode")).intValue();
+        instructorExitCode = ((Long)output.get("instructorExitCode")).intValue();
+    }
+}
