@@ -8,6 +8,9 @@ abstract public class CrossOver {
         if(type.equals("NPointCrossOver")){
             return new NPointCrossover();
         }
+        if(type.equals("SegmentedCrossOver")){
+            return new SegmentedCrossover();
+        }
         throw new RuntimeException("Invalid CrossOverType");
     }
 }
@@ -49,6 +52,32 @@ class NPointCrossover extends CrossOver {
         CrossOver onePointCrossOver = new OnePointCrossover();
         for (int i = 0; i < Config.maxCrossOverAttempts; i++) {
             for (int j = 0; j < Config.nCrossOver; j++) {
+                result = onePointCrossOver.crossOver(result[0], result[1]);
+            }
+            if (result[0].isValid() && result[1].isValid()) {
+                return result;
+            } else {
+                result[0] = new Chromosome(chromosomeA);
+                result[1] = new Chromosome(chromosomeB);
+            }
+        }
+
+        result[0] = new Chromosome(chromosomeA);
+        result[1] = new Chromosome(chromosomeB);
+        return result;
+    }
+}
+
+class SegmentedCrossover extends CrossOver {
+    @Override
+    Chromosome[] crossOver(Chromosome chromosomeA, Chromosome chromosomeB) {
+        Chromosome[] result = new Chromosome[2];
+        result[0] = new Chromosome(chromosomeA);
+        result[1] = new Chromosome(chromosomeB);
+        CrossOver onePointCrossOver = new OnePointCrossover();
+        int n = Config.random.nextInt(result[0].bits.length());
+        for (int i = 0; i < Config.maxCrossOverAttempts; i++) {
+            for (int j = 0; j < n; j++) {
                 result = onePointCrossOver.crossOver(result[0], result[1]);
             }
             if (result[0].isValid() && result[1].isValid()) {
