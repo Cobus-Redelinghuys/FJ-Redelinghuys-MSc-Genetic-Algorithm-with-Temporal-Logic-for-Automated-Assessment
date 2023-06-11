@@ -26,8 +26,10 @@ public class Config {
     public static final double MWeight;
     public static final double GWeight;
     public static final int maxCrossOverAttempts;
+    public static final int maxMutationAttempts;
 
     public static final CrossOver crossOver;
+    public static final Mutation mutation;
 
     static{
         JSONParser jsonParser = new JSONParser();
@@ -64,6 +66,8 @@ public class Config {
         GWeight = (double)jsonObject.get("GWeight");
         random = new Random(seed);
         maxCrossOverAttempts = ((Long)jsonObject.get("maxCrossOverAttempts")).intValue();
+        maxMutationAttempts = ((Long)jsonObject.get("maxMutationAttempts")).intValue();
         crossOver = CrossOver.getCrossOver(crossOverType);
+        mutation = Mutation.getMutation(mutationType);
     }
 }
