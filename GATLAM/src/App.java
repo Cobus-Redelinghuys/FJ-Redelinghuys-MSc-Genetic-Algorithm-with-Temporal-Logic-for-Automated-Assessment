@@ -1,8 +1,9 @@
 public class App {
     public static void main(String[] args) throws Exception {
-        Chromosome chromosomeA = new Chromosome();
-        System.out.println(chromosomeA.bits);
-        Chromosome mutation = Config.mutation.mutate(chromosomeA);
-        System.out.println(mutation.bits);
+        Chromosome[] pop = new Chromosome[10];
+        for (int i = 0; i < pop.length; i++) {
+            pop[i] = new Chromosome();
+        }
+        Config.interpretor.run(pop);
     }
 }

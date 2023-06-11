@@ -1,3 +1,6 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class Chromosome {
     final Integer[] genes = new Integer[Config.genes.length];
     final String bits;
@@ -53,5 +56,16 @@ public class Chromosome {
             }
         }
         return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    String toJSONString(){
+        JSONArray jsonArray = new JSONArray();
+        for (Integer gene : genes) {
+            jsonArray.add(gene);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Input", jsonArray);
+        return jsonObject.toJSONString();
     }
 }

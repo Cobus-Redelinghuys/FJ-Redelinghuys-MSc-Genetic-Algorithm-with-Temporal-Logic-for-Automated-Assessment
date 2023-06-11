@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Config {
-    static final GeneConfig[] genes; 
+    static final GeneConfig[] genes;
     static final Random random;
     public static final double reproductionProp;
     public static final double crossoverProp;
@@ -20,32 +20,30 @@ public class Config {
     public static final int nCrossOver;
     public static final int nMutation;
     public static final int tournamentSize;
-    public static final String interpreterPath;
-    public static final String interpreterCommand;
-    public static final String interpreterOutputPath;
     public static final double LTLWeight;
     public static final double MWeight;
     public static final double GWeight;
     public static final int maxCrossOverAttempts;
     public static final int maxMutationAttempts;
-    public static final int numberInterpreterInstances;
 
     public static final CrossOver crossOver;
     public static final Mutation mutation;
 
-    static{
+    public static final Interpretor interpretor;
+
+    static {
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
-        try{
+        try {
             obj = jsonParser.parse(new FileReader("Config.json"));
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        JSONObject jsonObject = (JSONObject)obj;
-        JSONArray geneArray = (JSONArray)jsonObject.get("Genes");
+        JSONObject jsonObject = (JSONObject) obj;
+        JSONArray geneArray = (JSONArray) jsonObject.get("Genes");
         GeneConfig[] tempArr = new GeneConfig[geneArray.size()];
-        for(int i=0; i < tempArr.length; i++){
-            JSONObject jObject = (JSONObject)geneArray.get(i);
+        for (int i = 0; i < tempArr.length; i++) {
+            JSONObject jObject = (JSONObject) geneArray.get(i);
             tempArr[i] = GeneConfig.getGeneConfig(jObject);
         }
         genes = tempArr;
@@ -60,18 +58,23 @@ public class Config {
         mutationProp = (double) jsonObject.get("mutationProp");
         nCrossOver = ((Long) jsonObject.get("nCrossOver")).intValue();
         tournamentSize = ((Long) jsonObject.get("tournamentSize")).intValue();
-        interpreterPath = (String) jsonObject.get("interpreterPath");
-        interpreterCommand = (String) jsonObject.get("interpreterCommand");
-        interpreterOutputPath = (String) jsonObject.get("interpreterOutputPath");
-        LTLWeight = (double)jsonObject.get("LTLWeight");
-        MWeight = (double)jsonObject.get("MWeight");
-        GWeight = (double)jsonObject.get("GWeight");
+        String interpreterPath = (String) jsonObject.get("interpreterPath");
+        String interpreterCommand = (String) jsonObject.get("interpreterCommand");
+        String interpreterOutputPath = (String) jsonObject.get("interpreterOutputPath");
+        LTLWeight = (double) jsonObject.get("LTLWeight");
+        MWeight = (double) jsonObject.get("MWeight");
+        GWeight = (double) jsonObject.get("GWeight");
         random = new Random(seed);
-        maxCrossOverAttempts = ((Long)jsonObject.get("maxCrossOverAttempts")).intValue();
-        maxMutationAttempts = ((Long)jsonObject.get("maxMutationAttempts")).intValue();
+        maxCrossOverAttempts = ((Long) jsonObject.get("maxCrossOverAttempts")).intValue();
+        maxMutationAttempts = ((Long) jsonObject.get("maxMutationAttempts")).intValue();
         crossOver = CrossOver.getCrossOver(crossOverType);
         mutation = Mutation.getMutation(mutationType);
         nMutation = ((Long) jsonObject.get("nMutation")).intValue();
-        numberInterpreterInstances = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
+        int numberInterpreterInstances = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
+        String interpretorExecutorName = (String)jsonObject.get("interpretorExecutorName");
+
+        interpretor = new Interpretor(interpreterPath, interpreterCommand, interpreterOutputPath,
+                numberInterpreterInstances, interpretorExecutorName);
+
     }
 }
