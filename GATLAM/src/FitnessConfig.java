@@ -1,10 +1,6 @@
-import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
-
-import javax.management.RuntimeErrorException;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -93,135 +89,7 @@ public class FitnessConfig {
         }
     }
 
-    public static float determineFitness(InterpretorResults[] output) {
-        float res = 0;
-        res += Safety(output);
-        res += Livelyness(output);
-        res += SegFault(output);
-        res += Exception(output);
-        res += ExecutionTime(output);
-        res += IllegalOutput(output);
-        res += ExpectedOutput(output);
-        res = (float) Config.LTLWeight * res;
-        return res;
-    }
-
-    private static float Safety(InterpretorResults[] output) {
-        if (!Safety.enabled) {
-            return 0;
-        }
-        float result = 0;
-        for (InterpretorResults interpretorResults : output) {
-            if (!(interpretorResults.studentErrOut.equals("") && interpretorResults.studentErrOut.isEmpty())) {
-                result += 1;
-            } else if (interpretorResults.studentStdOut.toUpperCase().contains("EXCEPTION")) {
-                result += 1;
-            }
-
-        }
-        result = Safety.weight * result / (float) output.length;
-        return result;
-    }
-
-    private static float Livelyness(InterpretorResults[] output) {
-        if (!Livelyness.enabled)
-            return 0;
-
-        float result = 0;
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentExitCode != 0) {
-                result += 1;
-            }
-        }
-        result = Livelyness.weight * result / output.length;
-        return result;
-    }
-
-    private static float SegFault(InterpretorResults[] output) {
-        if (Safety.enabled)
-            return 0;
-
-        if (!SegFault.enabled)
-            return 0;
-
-        float result = 0;
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentStdOut.toLowerCase().contains("segfault")
-                    || interpretorResults.studentStdOut.toLowerCase().contains("segmentation fault")
-                    || interpretorResults.studentExeTime == 139) {
-                result += 1;
-            }
-        }
-        result = SegFault.weight * result / output.length;
-        return result;
-    }
-
-    private static float Exception(InterpretorResults[] output) {
-        if (Safety.enabled)
-            return 0;
-
-        if (!SegFault.enabled)
-            return 0;
-
-        float result = 0;
-
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentStdOut.toLowerCase().contains("exception")
-                    || interpretorResults.studentStdOut.toLowerCase().contains("exceptions")) {
-                result += 1;
-            } else if (interpretorResults.studentStdOut.toLowerCase().contains("exception")
-                    || interpretorResults.studentStdOut.toLowerCase().contains("exceptions")) {
-                result += 1;
-            }
-        }
-        result = Exceptions.weight * result / output.length;
-        return result;
-    }
-
-    private static float ExecutionTime(InterpretorResults[] output) {
-        if (!ExecutionTime.enabled)
-            return 0;
-
-        float result = 0;
-
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentExitCode > ExecutionTime.maxTime) {
-                result += 1;
-            }
-        }
-        result = (float) ExecutionTime.weight * result / output.length;
-        return result;
-    }
-
-    private static float IllegalOutput(InterpretorResults[] output) {
-        if (!IllegalOutput.enabled)
-            return 0;
-
-        if (IllegalOutput.words.length <= 0)
-            return 0;
-
-        float result = 0;
-
-        for (InterpretorResults interpretorResults : output) {
-            for (String word : IllegalOutput.words) {
-                if (interpretorResults.studentStdOut.contains(word)) {
-                    result += 1;
-                }
-            }
-        }
-        result = IllegalOutput.weight * result / (IllegalOutput.words.length * output.length);
-        return result;
-    }
-
-    private static float ExpectedOutput(InterpretorResults[] output) {
-        if (!ExpectedOutput.enabled)
-            return 0;
-
-        float result = ExpectedOutput.constantExpected(output);
-
-        result = ExpectedOutput.weight * result / output.length;
-        return result;
-    }
+    
 
 }
 

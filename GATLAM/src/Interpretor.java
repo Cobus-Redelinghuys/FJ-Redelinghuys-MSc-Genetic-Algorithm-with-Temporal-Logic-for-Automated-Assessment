@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -77,7 +78,7 @@ public class Interpretor {
         }
     }
 
-    public HashMap<Chromosome, JSONObject> run(Chromosome[] chromosomes) {
+    public HashMap<Chromosome, InterpretorResults[]> run(Chromosome[] chromosomes) {
 
         ArrayList<InterpretorInstance> interpreterInstancesQueue = new ArrayList<>();
         ArrayList<InterpretorInstance> finishedList = new ArrayList<>();
@@ -107,10 +108,17 @@ public class Interpretor {
             }
         }
 
-        HashMap<Chromosome, JSONObject> results = new HashMap<>();
+        HashMap<Chromosome, InterpretorResults[]> results = new HashMap<>();
 
         for (InterpretorInstance interpretorInstance : finishedList) {
-            results.put(interpretorInstance.chromosome, interpretorInstance.result);
+            JSONArray resultsArray = (JSONArray)interpretorInstance.result.get("results");
+            InterpretorResults[] interpretorResultsArray = new InterpretorResults[resultsArray.size()];
+            int i=0;
+            for (Object obj : resultsArray) {
+                JSONObject jsonObject = (JSONObject)obj;
+                interpretorResultsArray[i] = new InterpretorResults(jsonObject);
+            }
+            results.put(interpretorInstance.chromosome, interpretorResultsArray);
         }
 
         return results;
