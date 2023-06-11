@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -137,5 +139,64 @@ class StochasticUniversalSampling extends Selection {
 
         return keep;
 
+    }
+}
+
+class LinearRankSelection extends Selection {
+    @Override
+    SelectionResult selectChromosomes(HashSet<Chromosome> testSet, int generation) {
+        Chromosome[] chromosomeArray = testSet.toArray(new Chromosome[0]);
+        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
+        HashMap<Chromosome, Float> fitnesses = new HashMap<>();
+        HashMap<Float, ArrayList<Chromosome>> revFitness = new HashMap<>();
+        for (Chromosome chromosome : chromosomeArray) {
+            fitnesses.put(chromosome, Fitness.determineFitness(results.get(chromosome)));
+            if (!revFitness.containsKey(fitnesses.get(chromosome))) {
+                revFitness.put(fitnesses.get(chromosome), new ArrayList<>());
+            }
+            revFitness.get(fitnesses.get(chromosome)).add(chromosome);
+        }
+
+        Float[] sortedArray = fitnesses.values().toArray(new Float[0]);
+        Arrays.sort(sortedArray);
+
+        HashMap<Chromosome, Integer> randFitness = new HashMap<>();
+        for (int i = 0; i < sortedArray.length; i++) {
+            for (Chromosome chromosome : revFitness.get(sortedArray[i])) {
+                randFitness.put(chromosome, i);
+            }
+        }
+
+        Chromosome[] winners = winners(randFitness, testSet.size()).toArray(new Chromosome[0]);
+        Chromosome[] loosers = loosers(randFitness, testSet.size()).toArray(new Chromosome[0]);
+
+        StatsNode sn = new StatsNode(generation, fitnesses);
+        return new SelectionResult(winners, loosers, sn);
+    }
+
+    HashSet<Chromosome> winners(HashMap<Chromosome, Integer> randFitness, int n) {
+        HashSet<Chromosome> result = new HashSet<>();
+        Chromosome[] chromosomes = randFitness.keySet().toArray(new Chromosome[0]);
+        while (result.size() <= Config.tournamentSize) {
+            int pos = Config.random.nextInt(chromosomes.length);
+            float p = randFitness.get(chromosomes[pos]) / (float) (n * (n - 1));
+            if (p < Config.random.nextFloat()) {
+                result.add(chromosomes[pos]);
+            }
+        }
+        return result;
+    }
+
+    HashSet<Chromosome> loosers(HashMap<Chromosome, Integer> randFitness, int n) {
+        HashSet<Chromosome> result = new HashSet<>();
+        Chromosome[] chromosomes = randFitness.keySet().toArray(new Chromosome[0]);
+        while (result.size() <= Config.tournamentSize) {
+            int pos = Config.random.nextInt(chromosomes.length);
+            float p = randFitness.get(chromosomes[pos]) / (float) (n * (n - 1));
+            if (1 - p < Config.random.nextFloat()) {
+                result.add(chromosomes[pos]);
+            }
+        }
+        return result;
     }
 }
