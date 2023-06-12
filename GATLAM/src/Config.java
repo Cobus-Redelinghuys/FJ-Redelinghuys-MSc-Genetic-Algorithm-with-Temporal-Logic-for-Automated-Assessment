@@ -5,6 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+@SuppressWarnings({"rawtypes"})
 public class Config {
     static final GeneConfig[] genes;
     static final Random random;
@@ -20,6 +21,7 @@ public class Config {
     public static final int nCrossOver;
     public static final int nMutation;
     public static final int tournamentSize;
+    public static final int numContestants;
     public static final double LTLWeight;
     public static final double MWeight;
     public static final double GWeight;
@@ -31,6 +33,7 @@ public class Config {
 
     public static final Interpretor interpretor;
 
+    
     static {
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
@@ -39,6 +42,7 @@ public class Config {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    
         JSONObject jsonObject = (JSONObject) obj;
         JSONArray geneArray = (JSONArray) jsonObject.get("Genes");
         GeneConfig[] tempArr = new GeneConfig[geneArray.size()];
@@ -74,6 +78,8 @@ public class Config {
 
         interpretor = new Interpretor(interpreterPath, interpreterCommand,
                 numberInterpreterInstances, interpretorExecutorName);
+
+        numContestants = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
 
     }
 }
