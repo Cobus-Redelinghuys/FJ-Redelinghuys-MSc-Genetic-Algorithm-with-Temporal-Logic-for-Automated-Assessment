@@ -80,5 +80,6 @@
     "maxCrossOverAttempts" : 100,
     "maxMutationAttempts" : 100,
     "nMutation":5,
-    "numberInterpreterInstances" : 5
+    "numberInterpreterInstances" : 5,
+    "truncationSelectionPer" : 0.75
 }

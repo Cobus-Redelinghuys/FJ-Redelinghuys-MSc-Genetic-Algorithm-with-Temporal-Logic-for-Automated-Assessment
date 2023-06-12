@@ -5,7 +5,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-@SuppressWarnings({"rawtypes"})
 public class Config {
     static final GeneConfig[] genes;
     static final Random random;
@@ -22,11 +21,12 @@ public class Config {
     public static final int nMutation;
     public static final int tournamentSize;
     public static final int numContestants;
-    public static final double LTLWeight;
-    public static final double MWeight;
-    public static final double GWeight;
+    public static final float LTLWeight;
+    public static final float MWeight;
+    public static final float GWeight;
     public static final int maxCrossOverAttempts;
     public static final int maxMutationAttempts;
+    public static final float truncationSelectionPer;
 
     public static final CrossOver crossOver;
     public static final Mutation mutation;
@@ -64,9 +64,9 @@ public class Config {
         tournamentSize = ((Long) jsonObject.get("tournamentSize")).intValue();
         String interpreterPath = (String) jsonObject.get("interpreterPath");
         String interpreterCommand = (String) jsonObject.get("interpreterCommand");
-        LTLWeight = (double) jsonObject.get("LTLWeight");
-        MWeight = (double) jsonObject.get("MWeight");
-        GWeight = (double) jsonObject.get("GWeight");
+        LTLWeight = ((Long) jsonObject.get("LTLWeight")).floatValue();
+        MWeight = ((Long) jsonObject.get("MWeight")).floatValue();
+        GWeight = ((Long) jsonObject.get("GWeight")).floatValue();
         random = new Random(seed);
         maxCrossOverAttempts = ((Long) jsonObject.get("maxCrossOverAttempts")).intValue();
         maxMutationAttempts = ((Long) jsonObject.get("maxMutationAttempts")).intValue();
@@ -80,7 +80,7 @@ public class Config {
                 numberInterpreterInstances, interpretorExecutorName);
 
         numContestants = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
-
+        truncationSelectionPer = ((Long) jsonObject.get("truncationSelectionPer")).floatValue();
     }
 }
 

@@ -327,3 +327,31 @@ class TournamentSelection extends Selection {
         return worstChrom;
     }
 }
+
+class TruncationSelection extends Selection{
+    @Override
+    SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
+        Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
+        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
+        HashMap<Chromosome, Float> fitnesses = new HashMap<>();
+        float bestFitness = Float.POSITIVE_INFINITY;
+        for (Chromosome chromosome : chromosomeArray) {
+            fitnesses.put(chromosome, Fitness.determineFitness(results.get(chromosome)));
+            if(bestFitness > fitnesses.get(chromosome)){
+                bestFitness = fitnesses.get(chromosome);
+            }
+        }
+
+        HashSet<Chromosome> possibleWinners = new HashSet<>();
+        HashSet<Chromosome> possibleLoosers = new HashSet<>();
+        for (Chromosome chromosome : fitnesses.keySet()) {
+            if(fitnesses.get(chromosome) < Config.truncationSelectionPer * bestFitness){
+                possibleWinners.add(chromosome);
+            } else {
+                possibleLoosers.add(chromosome);
+            }
+        }
+        StatsNode sn = new StatsNode(generation, fitnesses);
+        return new SelectionResult(possibleWinners.toArray(new Chromosome[0]), possibleLoosers.toArray(new Chromosome[0]), sn);
+    }
+}
