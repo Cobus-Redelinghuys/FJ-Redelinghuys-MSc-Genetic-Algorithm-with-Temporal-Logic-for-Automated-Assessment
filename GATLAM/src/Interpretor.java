@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -96,7 +97,7 @@ public class Interpretor {
                         instances[i].instanceNumber = i;
                         instances[i].start();
                     }
-                } else if (instances[i].done) {
+                } else if (instances[i].done.get()) {
                     try {
                         instances[i].join();
                     } catch (Exception e) {
@@ -109,13 +110,21 @@ public class Interpretor {
         }
 
         HashMap<Chromosome, InterpretorResults[]> results = new HashMap<>();
+        for (InterpretorInstance interpretorInstance : instances) {
+            while (interpretorInstance != null && !interpretorInstance.done.get()) {
+
+            }
+            if (interpretorInstance != null) {
+                finishedList.add(interpretorInstance);
+            }
+        }
 
         for (InterpretorInstance interpretorInstance : finishedList) {
-            JSONArray resultsArray = (JSONArray)interpretorInstance.result.get("results");
+            JSONArray resultsArray = (JSONArray) interpretorInstance.result.get("results");
             InterpretorResults[] interpretorResultsArray = new InterpretorResults[resultsArray.size()];
-            int i=0;
+            int i = 0;
             for (Object obj : resultsArray) {
-                JSONObject jsonObject = (JSONObject)obj;
+                JSONObject jsonObject = (JSONObject) obj;
                 interpretorResultsArray[i] = new InterpretorResults(jsonObject);
             }
             results.put(interpretorInstance.chromosome, interpretorResultsArray);
@@ -132,7 +141,7 @@ class InterpretorInstance extends Thread {
     final String command;
     final String executor;
     JSONObject result;
-    boolean done;
+    AtomicBoolean done = new AtomicBoolean(false);
 
     InterpretorInstance(Chromosome chromosome, String command, String executor) {
         this.chromosome = chromosome;
@@ -151,18 +160,19 @@ class InterpretorInstance extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
             result = null;
-            done = true;
+            done.set(true);
             return;
         } finally {
             JSONParser jsonParser = new JSONParser();
             Object obj = null;
             try {
-                obj = jsonParser.parse(new FileReader("Interpretorinstances/Instance_" + instanceNumber + "/output.json"));
+                obj = jsonParser
+                        .parse(new FileReader("Interpretorinstances/Instance_" + instanceNumber + "/output.json"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             result = (JSONObject) obj;
-            done = true;
+            done.set(true);
         }
     }
 
@@ -177,13 +187,13 @@ class InterpretorInstance extends Thread {
             error += (char) input;
             input = pro.getErrorStream().read();
         }
-        System.out.println(error);
+        // System.out.println(error);
         input = pro.getInputStream().read();
         while (input != -1) {
             error += (char) input;
             input = pro.getInputStream().read();
         }
-        System.out.println(error);
+        // System.out.println(error);
 
         pro.waitFor();
 
@@ -192,7 +202,7 @@ class InterpretorInstance extends Thread {
 
 }
 
-class InterpretorResults{
+class InterpretorResults {
     final String studentStdOut;
     final String studentErrOut;
     final String instructorStdOut;
@@ -202,14 +212,14 @@ class InterpretorResults{
     final int studentExitCode;
     final int instructorExitCode;
 
-    InterpretorResults(JSONObject output){
-        studentStdOut = (String)output.get("studentStdOut");
-        studentErrOut = (String)output.get("studentErrOut");
-        instructorStdOut = (String)output.get("instructorStdOut");
-        instructorErrOut = (String)output.get("instructorErrOut");
-        studentExeTime = (Long)output.get("studentExeTime");
-        instructorExeTime = (Long)output.get("instructorExeTime");
-        studentExitCode = ((Long)output.get("studentExitCode")).intValue();
-        instructorExitCode = ((Long)output.get("instructorExitCode")).intValue();
+    InterpretorResults(JSONObject output) {
+        studentStdOut = (String) output.get("studentStdOut");
+        studentErrOut = (String) output.get("studentErrOut");
+        instructorStdOut = (String) output.get("instructorStdOut");
+        instructorErrOut = (String) output.get("instructorErrOut");
+        studentExeTime = (Long) output.get("studentExeTime");
+        instructorExeTime = (Long) output.get("instructorExeTime");
+        studentExitCode = ((Long) output.get("studentExitCode")).intValue();
+        instructorExitCode = ((Long) output.get("instructorExitCode")).intValue();
     }
 }

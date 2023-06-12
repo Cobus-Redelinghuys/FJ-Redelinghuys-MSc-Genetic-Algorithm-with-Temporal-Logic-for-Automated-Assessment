@@ -1,12 +1,77 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class Stats {
     final HashMap<Integer, StatsNode> fitnessSets = new HashMap<>();
     final HashMap<Integer, HashSet<Chromosome>> populationPerGeneration = new HashMap<>();
+    final HashMap<Integer, Float> avgGen = new HashMap<>();
+    final HashMap<Integer, Float> stdGen = new HashMap<>();
+    final HashMap<Integer, Float> varGen = new HashMap<>();
+    final HashMap<Integer, Float> bestGen = new HashMap<>();
+    final HashMap<Integer, Chromosome> bestChromGen = new HashMap<>();
+
+
+
     public void addStats(StatsNode statsNode, HashSet<Chromosome> population){
         fitnessSets.put(statsNode.generation, statsNode);
+        populationPerGeneration.put(statsNode.generation, population);
+        avgAndBest(statsNode.generation);
+        std(statsNode.generation);
+        var(statsNode.generation);
     }
+
+    String getStatsForGeneration(int gen){
+        String res = "Generation: " + gen + '\n';
+        res += "Avg: " + avgGen.get(gen) + "\n";
+        res += "Std: " + stdGen.get(gen) + "\n";
+        res += "Var: " + varGen.get(gen) + "\n";
+        res += "Best: " + bestGen.get(gen) + "\n";
+        res += "Best: " + Arrays.toString(bestChromGen.get(gen).genes) + "\n";
+        res += "Best: " + bestChromGen.get(gen).bits + "\n";
+        return res;
+    }
+
+    void avgAndBest(int gen){
+        StatsNode sn = fitnessSets.get(gen);
+        Float best = Float.POSITIVE_INFINITY;
+        Chromosome bestChrom = null;
+        float sum = 0f;
+        for (Chromosome chromosome : sn.fitnessSet.keySet()) {
+            float fitness = sn.fitnessSet.get(chromosome);
+            if(fitness < best){
+                best = fitness;
+                bestChrom = chromosome;
+            }
+            sum += fitness;
+        }
+
+        avgGen.put(gen, sum/sn.fitnessSet.size());
+        bestGen.put(gen, best);
+        bestChromGen.put(gen, bestChrom);
+    }
+
+    void std(int gen){
+        StatsNode sn = fitnessSets.get(gen);
+        float avg = avgGen.get(gen);
+        float sum = 0f;
+        for (Chromosome chromosome : sn.fitnessSet.keySet()) {
+            float fitness = sn.fitnessSet.get(chromosome);
+            sum += Math.pow(fitness-avg, 2);            
+        }
+
+        stdGen.put(gen, (float)Math.sqrt(sum/sn.fitnessSet.size()));
+    }
+
+    void var(int gen){
+        HashSet<String> representations = new HashSet<>();
+        Chromosome[] pop = populationPerGeneration.get(gen).toArray(new Chromosome[0]);
+        for (Chromosome chromosome : pop) {
+            representations.add(chromosome.bits);
+        }
+        varGen.put(gen, (float)representations.size() / pop.length);
+    }
+
 }
 
 class StatsNode{

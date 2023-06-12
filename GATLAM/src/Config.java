@@ -66,9 +66,9 @@ public class Config {
         tournamentSize = ((Long) jsonObject.get("tournamentSize")).intValue();
         String interpreterPath = (String) jsonObject.get("interpreterPath");
         String interpreterCommand = (String) jsonObject.get("interpreterCommand");
-        LTLWeight = ((Long) jsonObject.get("LTLWeight")).floatValue();
-        MWeight = ((Long) jsonObject.get("MWeight")).floatValue();
-        GWeight = ((Long) jsonObject.get("GWeight")).floatValue();
+        LTLWeight = ((Double) jsonObject.get("LTLWeight")).floatValue();
+        MWeight = ((Double) jsonObject.get("MWeight")).floatValue();
+        GWeight = ((Double) jsonObject.get("GWeight")).floatValue();
         random = new Random(seed);
         maxCrossOverAttempts = ((Long) jsonObject.get("maxCrossOverAttempts")).intValue();
         maxMutationAttempts = ((Long) jsonObject.get("maxMutationAttempts")).intValue();
@@ -82,7 +82,7 @@ public class Config {
                 numberInterpreterInstances, interpretorExecutorName);
 
         numContestants = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
-        truncationSelectionPer = ((Long) jsonObject.get("truncationSelectionPer")).floatValue();
+        truncationSelectionPer = ((Double) jsonObject.get("truncationSelectionPer")).floatValue();
         String selectionName = (String)jsonObject.get("selectionMethod");
         selectionMethod = Selection.getSelection(selectionName);
     }

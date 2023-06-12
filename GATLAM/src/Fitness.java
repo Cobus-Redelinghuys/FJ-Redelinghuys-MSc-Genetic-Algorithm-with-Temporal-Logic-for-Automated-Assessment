@@ -1,49 +1,91 @@
 public class Fitness {
-    public static float determineFitness(InterpretorResults[] output) {
-        float res = 0;
-        res += Safety(output);
-        res += Livelyness(output);
-        res += SegFault(output);
-        res += Exception(output);
-        res += ExecutionTime(output);
-        res += IllegalOutput(output);
-        res += ExpectedOutput(output);
-        res = (float) Config.LTLWeight * res;
-        return res;
+    public static float determineFitness(InterpretorResults[] output, int gen, Chromosome chromosome) {
+        return LTL(output) + M(output) + ChromosomeDatabase.G(chromosome, gen);
     }
 
-    private static float Safety(InterpretorResults[] output) {
+    private static float LTL(InterpretorResults[] output) {
+        float result = 0;
+
+        for (InterpretorResults interpretorResults : output) {
+            float res = 0;
+            res += Safety(interpretorResults);
+            res += Livelyness(interpretorResults);
+            res += SegFault(interpretorResults);
+            res += Exception(interpretorResults);
+            res += ExecutionTime(interpretorResults);
+            res += IllegalOutput(interpretorResults);
+            res += ExpectedOutput(interpretorResults);
+            result += res;
+        }
+        return (float) Config.LTLWeight * result;
+    }
+
+    private static float M(InterpretorResults[] output){
+        float result = 0;
+
+        for (InterpretorResults interpretorResults : output) {
+            if(Safety(interpretorResults) > 0){
+                result++;
+                continue;
+            }
+            if(Livelyness(interpretorResults) > 0){
+                result++;
+                continue;
+            }
+            if(SegFault(interpretorResults) > 0){
+                result++;
+                continue;
+            }
+            if(Exception(interpretorResults) > 0){
+                result++;
+                continue;
+            }
+            if(ExecutionTime(interpretorResults) > 0){
+                result++;
+                continue;
+            }
+            if(IllegalOutput(interpretorResults) > 0){
+                result++;
+                continue;
+            }
+            if(ExpectedOutput(interpretorResults) > 0){
+                result++;
+                continue;
+            }
+        }
+        return result * Config.MWeight;
+    }
+
+
+
+    private static float Safety(InterpretorResults output) {
         if (!FitnessConfig.Safety.enabled) {
             return 0;
         }
         float result = 0;
-        for (InterpretorResults interpretorResults : output) {
-            if (!(interpretorResults.studentErrOut.equals("") && interpretorResults.studentErrOut.isEmpty())) {
-                result += 1;
-            } else if (interpretorResults.studentStdOut.toUpperCase().contains("EXCEPTION")) {
-                result += 1;
-            }
-
+        if (!(output.studentErrOut.equals("") && output.studentErrOut.isEmpty())) {
+            result += 1;
+        } else if (output.studentStdOut.toUpperCase().contains("EXCEPTION")) {
+            result += 1;
         }
-        result = FitnessConfig.Safety.weight * result / (float) output.length;
+
         return result;
     }
 
-    private static float Livelyness(InterpretorResults[] output) {
+    private static float Livelyness(InterpretorResults output) {
         if (!FitnessConfig.Livelyness.enabled)
             return 0;
 
         float result = 0;
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentExitCode != 0) {
-                result += 1;
-            }
+        if (output.studentExitCode != 0) {
+            result += 1;
         }
-        result = FitnessConfig.Livelyness.weight * result / output.length;
+
+        result = FitnessConfig.Livelyness.weight * result;
         return result;
     }
 
-    private static float SegFault(InterpretorResults[] output) {
+    private static float SegFault(InterpretorResults output) {
         if (FitnessConfig.Safety.enabled)
             return 0;
 
@@ -51,18 +93,16 @@ public class Fitness {
             return 0;
 
         float result = 0;
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentStdOut.toLowerCase().contains("segfault")
-                    || interpretorResults.studentStdOut.toLowerCase().contains("segmentation fault")
-                    || interpretorResults.studentExeTime == 139) {
-                result += 1;
-            }
+        if (output.studentStdOut.toLowerCase().contains("segfault")
+                || output.studentStdOut.toLowerCase().contains("segmentation fault")
+                || output.studentExeTime == 139) {
+            result += 1;
         }
-        result = FitnessConfig.SegFault.weight * result / output.length;
+        result = FitnessConfig.SegFault.weight * result;
         return result;
     }
 
-    private static float Exception(InterpretorResults[] output) {
+    private static float Exception(InterpretorResults output) {
         if (FitnessConfig.Safety.enabled)
             return 0;
 
@@ -71,35 +111,32 @@ public class Fitness {
 
         float result = 0;
 
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentStdOut.toLowerCase().contains("exception")
-                    || interpretorResults.studentStdOut.toLowerCase().contains("exceptions")) {
-                result += 1;
-            } else if (interpretorResults.studentStdOut.toLowerCase().contains("exception")
-                    || interpretorResults.studentStdOut.toLowerCase().contains("exceptions")) {
-                result += 1;
-            }
+        if (output.studentStdOut.toLowerCase().contains("exception")
+                || output.studentStdOut.toLowerCase().contains("exceptions")) {
+            result += 1;
+        } else if (output.studentStdOut.toLowerCase().contains("exception")
+                || output.studentStdOut.toLowerCase().contains("exceptions")) {
+            result += 1;
         }
-        result = FitnessConfig.Exceptions.weight * result / output.length;
+
+        result = FitnessConfig.Exceptions.weight * result;
         return result;
     }
 
-    private static float ExecutionTime(InterpretorResults[] output) {
+    private static float ExecutionTime(InterpretorResults output) {
         if (!FitnessConfig.ExecutionTime.enabled)
             return 0;
 
         float result = 0;
 
-        for (InterpretorResults interpretorResults : output) {
-            if (interpretorResults.studentExitCode > FitnessConfig.ExecutionTime.maxTime) {
-                result += 1;
-            }
+        if (output.studentExitCode > FitnessConfig.ExecutionTime.maxTime) {
+            result += 1;
         }
-        result = (float) FitnessConfig.ExecutionTime.weight * result / output.length;
+        result = (float) FitnessConfig.ExecutionTime.weight * result;
         return result;
     }
 
-    private static float IllegalOutput(InterpretorResults[] output) {
+    private static float IllegalOutput(InterpretorResults output) {
         if (!FitnessConfig.IllegalOutput.enabled)
             return 0;
 
@@ -108,24 +145,23 @@ public class Fitness {
 
         float result = 0;
 
-        for (InterpretorResults interpretorResults : output) {
-            for (String word : FitnessConfig.IllegalOutput.words) {
-                if (interpretorResults.studentStdOut.contains(word)) {
-                    result += 1;
-                }
+        for (String word : FitnessConfig.IllegalOutput.words) {
+            if (output.studentStdOut.contains(word)) {
+                result += 1;
             }
         }
-        result = FitnessConfig.IllegalOutput.weight * result / (FitnessConfig.IllegalOutput.words.length * output.length);
+        result = FitnessConfig.IllegalOutput.weight * result
+                / (FitnessConfig.IllegalOutput.words.length);
         return result;
     }
 
-    private static float ExpectedOutput(InterpretorResults[] output) {
+    private static float ExpectedOutput(InterpretorResults output) {
         if (!FitnessConfig.ExpectedOutput.enabled)
             return 0;
 
         float result = FitnessConfig.ExpectedOutput.constantExpected(output);
 
-        result = FitnessConfig.ExpectedOutput.weight * result / output.length;
+        result = FitnessConfig.ExpectedOutput.weight * result;
         return result;
     }
 }

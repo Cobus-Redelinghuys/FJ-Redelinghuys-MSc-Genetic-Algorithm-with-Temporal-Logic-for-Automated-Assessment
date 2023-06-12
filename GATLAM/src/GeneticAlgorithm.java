@@ -5,6 +5,12 @@ public class GeneticAlgorithm {
     HashSet<Chromosome> population = new HashSet<>();
     Stats stats = new Stats();
 
+    GeneticAlgorithm(){
+        while(population.size() < Config.populationSize-1){
+            population.add(new Chromosome());
+        }
+    }
+
     public void run() {
         for (int i = 0; i < Config.numGenerations; i++) {
             SelectionResult selectionResult = Config.selectionMethod.selectChromosomes(population, i);
@@ -43,6 +49,7 @@ public class GeneticAlgorithm {
                 }
             }
             stats.addStats(selectionResult.statsNode, population);
+            System.out.println(stats.getStatsForGeneration(i));
         }
     }
 }

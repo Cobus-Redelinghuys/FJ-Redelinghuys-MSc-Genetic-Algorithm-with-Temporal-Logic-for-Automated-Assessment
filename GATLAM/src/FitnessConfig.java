@@ -26,7 +26,7 @@ public class FitnessConfig {
         JSONObject jsonObject = (JSONObject) obj;
         Object res = null;
         try {
-            res = new FitnessConfigField((JSONObject) jsonObject);
+            res = new FitnessConfigField((JSONObject) ((JSONObject) jsonObject).get("Safety"));
         } catch (Exception e) {
             e.printStackTrace();
             res = new FitnessConfigField();
@@ -35,7 +35,7 @@ public class FitnessConfig {
         }
 
         try {
-            res = new FitnessConfigField((JSONObject) jsonObject);
+            res = new FitnessConfigField((JSONObject) ((JSONObject) jsonObject).get("Livelyness"));
         } catch (Exception e) {
             e.printStackTrace();
             res = new FitnessConfigField();
@@ -44,7 +44,7 @@ public class FitnessConfig {
         }
 
         try {
-            res = new FitnessConfigField((JSONObject) jsonObject);
+            res = new FitnessConfigField((JSONObject) ((JSONObject) jsonObject).get("SegFault"));
         } catch (Exception e) {
             e.printStackTrace();
             res = new FitnessConfigField();
@@ -53,7 +53,7 @@ public class FitnessConfig {
         }
 
         try {
-            res = new FitnessConfigField((JSONObject) jsonObject);
+            res = new FitnessConfigField((JSONObject) ((JSONObject) jsonObject).get("Exceptions"));
         } catch (Exception e) {
             e.printStackTrace();
             res = new FitnessConfigField();
@@ -62,7 +62,7 @@ public class FitnessConfig {
         }
 
         try {
-            res = new ExecutionTimeField((JSONObject) jsonObject);
+            res = new ExecutionTimeField((JSONObject) ((JSONObject) jsonObject).get("ExecutionTime"));
         } catch (Exception e) {
             e.printStackTrace();
             res = new ExecutionTimeField();
@@ -88,8 +88,6 @@ public class FitnessConfig {
             ExpectedOutput = (ExpectedOutputField) res;
         }
     }
-
-    
 
 }
 
@@ -176,7 +174,7 @@ class ExpectedOutputField {
             enabled = (Boolean) jsonObject.get("enabled");
             weight = ((Long) jsonObject.get("weight")).floatValue();
             exactMatch = (Boolean) jsonObject.get("exactMatch");
-            splitChar = (String)jsonObject.get("splittingChar");
+            splitChar = (String) jsonObject.get("splittingChar");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,33 +189,32 @@ class ExpectedOutputField {
         splitChar = "\n";
     }
 
-    public float constantExpected(InterpretorResults[] output) {
+    public float constantExpected(InterpretorResults output) {
         int matched = 0;
         int possibles = 0;
-        int penalty=0;
-        for (InterpretorResults interpretorResults : output) {
-            if (exactMatch) {
-                if (interpretorResults.studentStdOut.equals(interpretorResults.instructorStdOut)) {
+        int penalty = 0;
+        if (exactMatch) {
+            if (output.studentStdOut.equals(output.instructorStdOut)) {
+                matched++;
+            }
+            possibles++;
+        } else {
+            ArrayList<String> studentLines = new ArrayList<>();
+            Collections.addAll(studentLines, output.studentStdOut.split(splitChar));
+            ArrayList<String> instructorLines = new ArrayList<>();
+            Collections.addAll(instructorLines, output.instructorStdOut.split(splitChar));
+            while (!instructorLines.isEmpty() && !studentLines.isEmpty()) {
+                String studentLine = studentLines.get(0);
+                if (instructorLines.contains(studentLine)) {
                     matched++;
                 }
-                possibles++;
-            } else {
-                ArrayList<String> studentLines = new ArrayList<>();
-                Collections.addAll(studentLines, interpretorResults.studentStdOut.split(splitChar));
-                ArrayList<String> instructorLines = new ArrayList<>();
-                Collections.addAll(instructorLines, interpretorResults.instructorStdOut.split(splitChar));
-                while(!instructorLines.isEmpty() && !studentLines.isEmpty()){
-                    String studentLine = studentLines.get(0);
-                    if(instructorLines.contains(studentLine)){
-                        matched++;
-                    }
-                    studentLines.remove(studentLine);
-                    instructorLines.remove(studentLine);
-                }
-                possibles = instructorLines.size();
-                penalty = studentLines.size();
+                studentLines.remove(studentLine);
+                instructorLines.remove(studentLine);
             }
+            possibles = instructorLines.size();
+            penalty = studentLines.size();
         }
+
         float result = ((float) matched - (float) penalty) / (float) possibles;
         return result;
     }
