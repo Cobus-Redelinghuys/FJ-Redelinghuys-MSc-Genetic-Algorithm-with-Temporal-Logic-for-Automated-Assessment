@@ -81,5 +81,6 @@
     "maxMutationAttempts" : 100,
     "nMutation":5,
     "numberInterpreterInstances" : 5,
-    "truncationSelectionPer" : 0.75
+    "truncationSelectionPer" : 0.75,
+    "selectionMethod" : "RouletteSelection"
 }

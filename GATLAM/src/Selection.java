@@ -5,6 +5,28 @@ import java.util.HashSet;
 
 abstract public class Selection {
     abstract SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation);
+
+    static Selection getSelection(String selectionMethod){
+        if(selectionMethod.equals("RouletteSelection")){
+            return new RouletteSelection();
+        }
+        if(selectionMethod.equals("StochasticUniversalSampling")){
+            return new StochasticUniversalSampling();
+        }
+        if(selectionMethod.equals("LinearRankSelection")){
+            return new LinearRankSelection();
+        }
+        if(selectionMethod.equals("ExponentialRankSelection")){
+            return new ExponentialRankSelection();
+        }
+        if(selectionMethod.equals("TournamentSelection")){
+            return new TournamentSelection();
+        }
+        if(selectionMethod.equals("TruncationSelection")){
+            return new TruncationSelection();
+        }
+        throw new RuntimeException("Invalid Selection Method");
+    }
 }
 
 class SelectionResult {

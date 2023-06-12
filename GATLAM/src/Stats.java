@@ -1,8 +1,10 @@
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Stats {
     final HashMap<Integer, StatsNode> fitnessSets = new HashMap<>();
-    public void addStats(StatsNode statsNode){
+    final HashMap<Integer, HashSet<Chromosome>> populationPerGeneration = new HashMap<>();
+    public void addStats(StatsNode statsNode, HashSet<Chromosome> population){
         fitnessSets.put(statsNode.generation, statsNode);
     }
 }

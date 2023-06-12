@@ -33,6 +33,8 @@ public class Config {
 
     public static final Interpretor interpretor;
 
+    public static final Selection selectionMethod;
+
     
     static {
         JSONParser jsonParser = new JSONParser();
@@ -81,6 +83,8 @@ public class Config {
 
         numContestants = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
         truncationSelectionPer = ((Long) jsonObject.get("truncationSelectionPer")).floatValue();
+        String selectionName = (String)jsonObject.get("selectionMethod");
+        selectionMethod = Selection.getSelection(selectionName);
     }
 }
 
