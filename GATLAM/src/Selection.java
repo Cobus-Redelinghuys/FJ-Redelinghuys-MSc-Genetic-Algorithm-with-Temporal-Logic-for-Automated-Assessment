@@ -59,7 +59,12 @@ class RouletteSelection extends Selection {
         HashMap<Chromosome, Float> probabilities = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
             float fit = fitnesses.get(chromosome);
-            probabilities.put(chromosome,  fit / sum);
+            if(sum == 0){
+                probabilities.put(chromosome,  0.0f);
+            } else{
+                probabilities.put(chromosome,  fit / sum);
+            }
+            
         }
 
         HashSet<Chromosome> winnersSet = new HashSet<>();
@@ -72,7 +77,7 @@ class RouletteSelection extends Selection {
             }
         }
 
-        while (winnersSet.size() <= Config.tournamentSize) {
+        while (loosersSet.size() <= Config.tournamentSize) {
             int pos = Config.random.nextInt(probabilities.size());
             Chromosome candidate = probabilities.keySet().toArray(new Chromosome[0])[pos];
             if (Config.random.nextFloat() <= probabilities.get(candidate)) {
