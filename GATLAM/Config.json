@@ -65,7 +65,7 @@
     "mutationType":"RandomInversion",
     "selectionSize":10,
     "populationSize":100,
-    "numGenerations":150,
+    "numGenerations":100,
     "crossOverType":"UniformedCrossOver",
     "mutationProp":0.5,
     "nCrossOver":5,

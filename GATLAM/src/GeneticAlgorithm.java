@@ -47,7 +47,6 @@ public class GeneticAlgorithm {
                     }
                 }
             }
-            System.out.println(population.size());
             for (Chromosome chromosome : selectionResult.loosers) {
                 if (offspring.size() > 0) {
                     population.remove(chromosome);
@@ -56,9 +55,12 @@ public class GeneticAlgorithm {
                     offspring.remove(replacement);
                 }
             }
-            System.out.println(population.size());
             stats.addStats(selectionResult.statsNode, population);
             System.out.println(stats.getStatsForGeneration(i));
         }
+    }
+
+    void printSummaryToFile(String file){
+        stats.toJSONFile(file);
     }
 }

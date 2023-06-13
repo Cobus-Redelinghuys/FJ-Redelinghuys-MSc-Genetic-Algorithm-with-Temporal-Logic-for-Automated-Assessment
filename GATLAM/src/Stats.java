@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,10 +82,39 @@ public class Stats {
         JSONObject result = new JSONObject();
         JSONArray fitRes = new JSONArray();
         for (StatsNode sNs : fitnessSets.values()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("Detailed", sNs.toJSON());
+            jsonObject.put("Summary", toJSONSummary(sNs.generation));
             fitRes.add(sNs.toJSON());
         }
         result.put("Results", fitRes);
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    JSONObject toJSONSummary(int gen){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("avg", avgGen.get(gen));
+        jsonObject.put("std", stdGen.get(gen));
+        jsonObject.put("var", varGen.get(gen));
+        jsonObject.put("bestFitness", bestGen.get(gen));
+        JSONArray genes = new JSONArray();
+        for(Integer gene: bestChromGen.get(gen).genes){
+            genes.add(gene);
+        }
+        jsonObject.put("bestGenes", genes);
+        jsonObject.put("bestBinary", bestChromGen.get(gen).bits);
+        return jsonObject;
+    }
+
+    void toJSONFile(String fileName){
+        JSONObject jsonObject = toJSON();
+        try (FileWriter fileWriter = new FileWriter(fileName)) {
+            fileWriter.write(jsonObject.toJSONString());
+            System.out.println("JSON object has been written to the file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
@@ -119,6 +150,7 @@ class StatsNode{
                 irResults.add(irResult.toJSON());
             }
             jsonObject.put("InterpretorResults", irResults);
+            chromosomeArr.add(jsonObject);
         }
         result.put("Chromosomes", chromosomeArr);
         return result;
