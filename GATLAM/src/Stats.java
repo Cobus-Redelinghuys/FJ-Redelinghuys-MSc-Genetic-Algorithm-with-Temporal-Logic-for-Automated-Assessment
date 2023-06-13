@@ -15,15 +15,19 @@ public class Stats {
     final HashMap<Integer, Float> varGen = new HashMap<>();
     final HashMap<Integer, Float> bestGen = new HashMap<>();
     final HashMap<Integer, Chromosome> bestChromGen = new HashMap<>();
+    final HashMap<Integer, Long> durGen = new HashMap<>();
+    
+    long algorithmDuration;
 
 
 
-    public void addStats(StatsNode statsNode, HashSet<Chromosome> population){
+    public void addStats(StatsNode statsNode, HashSet<Chromosome> population, long generationDuration){
         fitnessSets.put(statsNode.generation, statsNode);
         populationPerGeneration.put(statsNode.generation, population);
         avgAndBest(statsNode.generation);
         std(statsNode.generation);
         var(statsNode.generation);
+        durGen.put(statsNode.generation, generationDuration);
     }
 
     String getStatsForGeneration(int gen){
@@ -34,6 +38,7 @@ public class Stats {
         res += "Best: " + bestGen.get(gen) + "\n";
         res += "Best: " + Arrays.toString(bestChromGen.get(gen).genes) + "\n";
         res += "Best: " + bestChromGen.get(gen).bits + "\n";
+        res += "Dur: " + durGen.get(gen) + "\n";
         return res;
     }
 
@@ -104,6 +109,7 @@ public class Stats {
         }
         jsonObject.put("bestGenes", genes);
         jsonObject.put("bestBinary", bestChromGen.get(gen).bits);
+        jsonObject.put("duration", durGen.get(gen));
         return jsonObject;
     }
 

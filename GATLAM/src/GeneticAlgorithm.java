@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -12,7 +14,9 @@ public class GeneticAlgorithm {
     }
 
     public void run() {
+        LocalDateTime start = LocalDateTime.now();
         for (int i = 0; i < Config.numGenerations; i++) {
+            LocalDateTime generationStartTime = LocalDateTime.now();
             SelectionResult selectionResult = Config.selectionMethod.selectChromosomes(population, i);
             if (selectionResult.winners.length == 0) {
                 Chromosome[] popArr = population.toArray(new Chromosome[0]);
@@ -55,9 +59,12 @@ public class GeneticAlgorithm {
                     offspring.remove(replacement);
                 }
             }
-            stats.addStats(selectionResult.statsNode, population);
+            LocalDateTime generationEndTime = LocalDateTime.now();
+            stats.addStats(selectionResult.statsNode, population, ChronoUnit.MILLIS.between(generationStartTime, generationEndTime));
             System.out.println(stats.getStatsForGeneration(i));
         }
+        LocalDateTime endTime = LocalDateTime.now();
+        stats.algorithmDuration = ChronoUnit.MILLIS.between(start, endTime);
     }
 
     void printSummaryToFile(String file){

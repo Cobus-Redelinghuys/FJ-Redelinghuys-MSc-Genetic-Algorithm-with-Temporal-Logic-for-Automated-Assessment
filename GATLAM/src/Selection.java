@@ -326,7 +326,7 @@ class TournamentSelection extends Selection {
             for (Chromosome chromosome : results.keySet()) {
                 localFitness.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
             }
-            winners.add(loosers(localFitness));
+            looosers.add(loosers(localFitness));
             fitnesses.putAll(localFitness);
         }
 
