@@ -267,7 +267,8 @@ class ExponentialRankSelection extends Selection {
         while (result.size() <= Config.tournamentSize) {
             int pos = Config.random.nextInt(chromosomes.length);
             float lower = ((float) (n * 2 * (n - 1))) / (6 * (n - 1) + n);
-            float p = 1.0f * (float) Math.pow(-1 * (randFitness.get(chromosomes[pos]) / lower), Math.E);
+            float base = -1 * (randFitness.get(chromosomes[pos]) / lower);
+            float p = 1.0f * (float) Math.pow(Math.E, base);
             if (p < Config.random.nextFloat()) {
                 result.add(chromosomes[pos]);
             }
@@ -281,7 +282,7 @@ class ExponentialRankSelection extends Selection {
         while (result.size() <= Config.tournamentSize) {
             int pos = Config.random.nextInt(chromosomes.length);
             float lower = ((float) (n * 2 * (n - 1))) / (6 * (n - 1) + n);
-            float p = 1.0f * (float) Math.pow(-1 * (randFitness.get(chromosomes[pos]) / lower), Math.E);
+            float p = 1.0f * (float) Math.pow(Math.E, -1 * (randFitness.get(chromosomes[pos]) / lower));
             if (1 - p < Config.random.nextFloat()) {
                 result.add(chromosomes[pos]);
             }
