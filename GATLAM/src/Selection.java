@@ -85,7 +85,7 @@ class RouletteSelection extends Selection {
             }
         }
 
-        StatsNode sn = new StatsNode(generation, fitnesses);
+        StatsNode sn = new StatsNode(generation, fitnesses, results);
         return new SelectionResult(winnersSet.toArray(new Chromosome[0]), loosersSet.toArray(new Chromosome[0]), sn);
 
     }
@@ -104,7 +104,7 @@ class StochasticUniversalSampling extends Selection {
         HashSet<Chromosome> winnersSet = winners(fitnesses);
         HashSet<Chromosome> loosersSet = loosers(fitnesses);
 
-        StatsNode sn = new StatsNode(generation, fitnesses);
+        StatsNode sn = new StatsNode(generation, fitnesses, results);
         return new SelectionResult(winnersSet.toArray(new Chromosome[0]), loosersSet.toArray(new Chromosome[0]), sn);
     }
 
@@ -198,7 +198,7 @@ class LinearRankSelection extends Selection {
         Chromosome[] winners = winners(randFitness, population.size()).toArray(new Chromosome[0]);
         Chromosome[] loosers = loosers(randFitness, population.size()).toArray(new Chromosome[0]);
 
-        StatsNode sn = new StatsNode(generation, fitnesses);
+        StatsNode sn = new StatsNode(generation, fitnesses, results);
         return new SelectionResult(winners, loosers, sn);
     }
 
@@ -257,7 +257,7 @@ class ExponentialRankSelection extends Selection {
         Chromosome[] winners = winners(randFitness, population.size()).toArray(new Chromosome[0]);
         Chromosome[] loosers = loosers(randFitness, population.size()).toArray(new Chromosome[0]);
 
-        StatsNode sn = new StatsNode(generation, fitnesses);
+        StatsNode sn = new StatsNode(generation, fitnesses, results);
         return new SelectionResult(winners, loosers, sn);
     }
 
@@ -296,6 +296,7 @@ class TournamentSelection extends Selection {
         HashSet<Chromosome> winners = new HashSet<>();
         HashSet<Chromosome> looosers = new HashSet<>();
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
+        HashMap<Chromosome, InterpretorResults[]> interpertorResults = new HashMap<>();
 
         Chromosome[] popArr = population.toArray(new Chromosome[0]);
         while (winners.size() <= Config.tournamentSize) {
@@ -304,6 +305,7 @@ class TournamentSelection extends Selection {
                 candidates[i] = popArr[Config.random.nextInt(popArr.length)];
             }
             HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(candidates);
+            interpertorResults.putAll(results);
             HashMap<Chromosome, Float> localFitness = new HashMap<>();
             for (Chromosome chromosome : results.keySet()) {
                 localFitness.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
@@ -318,6 +320,7 @@ class TournamentSelection extends Selection {
                 candidates[i] = popArr[Config.random.nextInt(popArr.length)];
             }
             HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(candidates);
+            interpertorResults.putAll(results);
             HashMap<Chromosome, Float> localFitness = new HashMap<>();
             for (Chromosome chromosome : results.keySet()) {
                 localFitness.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
@@ -326,7 +329,7 @@ class TournamentSelection extends Selection {
             fitnesses.putAll(localFitness);
         }
 
-        StatsNode sn = new StatsNode(generation, fitnesses);
+        StatsNode sn = new StatsNode(generation, fitnesses, interpertorResults);
         SelectionResult result = new SelectionResult(winners.toArray(new Chromosome[0]), looosers.toArray(new Chromosome[0]), sn);
         return result;
     }
@@ -379,7 +382,7 @@ class TruncationSelection extends Selection{
                 possibleLoosers.add(chromosome);
             }
         }
-        StatsNode sn = new StatsNode(generation, fitnesses);
+        StatsNode sn = new StatsNode(generation, fitnesses, results);
         return new SelectionResult(possibleWinners.toArray(new Chromosome[0]), possibleLoosers.toArray(new Chromosome[0]), sn);
     }
 }

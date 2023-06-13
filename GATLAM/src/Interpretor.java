@@ -222,4 +222,18 @@ class InterpretorResults {
         studentExitCode = ((Long) output.get("studentExitCode")).intValue();
         instructorExitCode = ((Long) output.get("instructorExitCode")).intValue();
     }
+
+    @SuppressWarnings("unchecked")
+    JSONObject toJSON() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("studentStdOut", studentStdOut);
+        jsonObject.put("studentErrOut", studentErrOut);
+        jsonObject.put("instructorStdOut", instructorStdOut);
+        jsonObject.put("instructorErrOut", instructorErrOut);
+        jsonObject.put("studentExeTime", studentExeTime);
+        jsonObject.put("instructorExeTime", instructorExeTime);
+        jsonObject.put("studentExitCode", studentExitCode);
+        jsonObject.put("instructorExitCode", instructorExitCode);
+        return jsonObject;
+    }
 }

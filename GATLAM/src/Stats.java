@@ -2,6 +2,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class Stats {
     final HashMap<Integer, StatsNode> fitnessSets = new HashMap<>();
     final HashMap<Integer, HashSet<Chromosome>> populationPerGeneration = new HashMap<>();
@@ -72,14 +75,52 @@ public class Stats {
         varGen.put(gen, (float)representations.size() / pop.length);
     }
 
+    @SuppressWarnings("unchecked")
+    JSONObject toJSON(){
+        JSONObject result = new JSONObject();
+        JSONArray fitRes = new JSONArray();
+        for (StatsNode sNs : fitnessSets.values()) {
+            fitRes.add(sNs.toJSON());
+        }
+        result.put("Results", fitRes);
+        return result;
+    }
+
 }
 
 class StatsNode{
     final int generation;
     final HashMap<Chromosome, Float> fitnessSet;
+    final HashMap<Chromosome, InterpretorResults[]> interpretorResults;
 
-    StatsNode(int generation, HashMap<Chromosome, Float> fitnessSet){
+    StatsNode(int generation, HashMap<Chromosome, Float> fitnessSet, HashMap<Chromosome, InterpretorResults[]> interpretorResults){
         this.generation = generation;
         this.fitnessSet = fitnessSet;
+        this.interpretorResults = interpretorResults;
+    }
+
+    @SuppressWarnings("unchecked")
+    JSONObject toJSON(){
+        JSONObject result = new JSONObject();
+        result.put("generation", generation);
+        JSONArray chromosomeArr = new JSONArray();
+        for (Chromosome chromosome : fitnessSet.keySet()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("bits", chromosome.bits);
+            JSONArray genes = new JSONArray();
+            for (Integer gene : chromosome.genes) {
+                genes.add(gene);
+            }
+            jsonObject.put("genes", genes);
+            jsonObject.put("fitness", fitnessSet.get(chromosome));
+            jsonObject.put("fitnessBreakdown", ChromosomeDatabase.get(chromosome, generation).toJSON());
+            JSONArray irResults = new JSONArray();
+            for (InterpretorResults irResult : interpretorResults.get(chromosome)) {
+                irResults.add(irResult.toJSON());
+            }
+            jsonObject.put("InterpretorResults", irResults);
+        }
+        result.put("Chromosomes", chromosomeArr);
+        return result;
     }
 }
