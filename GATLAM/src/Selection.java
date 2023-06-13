@@ -158,9 +158,9 @@ class StochasticUniversalSampling extends Selection {
         for (Float ptr : pointers.values()) {
             int i = 0;
             fitSum = 0;
-            while (fitSum < ptr) {
-                i++;
+            while (fitSum < ptr && i < fitnesses.size()-1) {
                 fitSum += fitnesses.get(fitnesses.keySet().toArray(new Chromosome[0])[i]);
+                i++;
             }
             keep.add(fitnesses.keySet().toArray(new Chromosome[0])[i]);
         }

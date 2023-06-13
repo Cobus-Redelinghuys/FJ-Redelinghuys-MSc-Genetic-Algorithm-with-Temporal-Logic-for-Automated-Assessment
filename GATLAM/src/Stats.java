@@ -85,7 +85,7 @@ public class Stats {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("Detailed", sNs.toJSON());
             jsonObject.put("Summary", toJSONSummary(sNs.generation));
-            fitRes.add(sNs.toJSON());
+            fitRes.add(jsonObject);
         }
         result.put("Results", fitRes);
         return result;
