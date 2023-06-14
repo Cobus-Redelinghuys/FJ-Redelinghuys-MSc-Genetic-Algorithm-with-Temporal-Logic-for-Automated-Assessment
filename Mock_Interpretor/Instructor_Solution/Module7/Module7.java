@@ -11,7 +11,7 @@ public class Module7{
     public static int readFile(){
         int returnVal = 0;
         try {
-            File myObj = new File("./modules/Module7/config.txt");
+            File myObj = new File("./Instructor_Solution/Module7/config.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();

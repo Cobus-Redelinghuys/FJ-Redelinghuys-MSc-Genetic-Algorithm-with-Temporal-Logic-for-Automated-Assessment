@@ -5,7 +5,7 @@ public class Main{
     public static int readFile(){
         int returnVal = 0;
         try {
-            File myObj = new File("./modules/Module6/config.txt");
+            File myObj = new File("./Instructor_Solution/Module6/config.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();

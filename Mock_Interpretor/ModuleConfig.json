@@ -1,72 +1,72 @@
 {
     "modules" : [
         {
-            "moduleName" : "module1",
-            "enabled" : true,
-            "relativePath" : "./modules/Module1/Module1",
+            "moduleName" : "Module1",
+            "enabled" : false,
+            "relativePath" : "/Module1/Module1",
             "executionCommand" : "",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module2",
-            "enabled" : true,
-            "relativePath" : "./modules/Module2/Module2",
+            "moduleName" : "Module2",
+            "enabled" : false,
+            "relativePath" : "/Module2/Module2",
             "executionCommand" : "",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module3",
-            "enabled" : true,
-            "relativePath" : "./modules/Module3/Module3",
+            "moduleName" : "Module3",
+            "enabled" : false,
+            "relativePath" : "/Module3/Module3",
             "executionCommand" : "",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module4",
+            "moduleName" : "Module4",
             "enabled" : true,
-            "relativePath" : "./modules/Module4/Module4.jar",
+            "relativePath" : "/Module4/Module4.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module5",
+            "moduleName" : "Module5",
             "enabled" : true,
-            "relativePath" : "./modules/Module5/Module5.jar",
+            "relativePath" : "/Module5/Module5.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module6",
+            "moduleName" : "Module6",
             "enabled" : true,
-            "relativePath" : "./modules/Module6/Module6.jar",
+            "relativePath" : "/Module6/Module6.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module7",
+            "moduleName" : "Module7",
             "enabled" : true,
-            "relativePath" : "./modules/Module7/Module7.jar",
+            "relativePath" : "/Module7/Module7.jar",
             "executionCommand" : "java -jar",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module8",
+            "moduleName" : "Module8",
             "enabled" : true,
-            "relativePath" : "./modules/Module8/Module8.jar",
+            "relativePath" : "/Module8/Module8.jar",
             "executionCommand" : "java -jar",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module9",
+            "moduleName" : "Module9",
             "enabled" : true,
-            "relativePath" : "./modules/Module9/Module9.jar",
+            "relativePath" : "/Module9/Module9.jar",
             "executionCommand" : "java -ea -jar",
             "numberOfCLArguments" : 1
         },
         {
-            "moduleName" : "module10",
+            "moduleName" : "Module10",
             "enabled" : true,
-            "relativePath" : "./modules/Module10/Module10.jar",
+            "relativePath" : "/Module10/Module10.jar",
             "executionCommand" : "java -jar",
             "numberOfCLArguments" : 1
         }

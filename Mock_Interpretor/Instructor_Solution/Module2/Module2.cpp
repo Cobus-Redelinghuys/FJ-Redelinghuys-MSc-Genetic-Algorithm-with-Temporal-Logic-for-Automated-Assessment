@@ -12,7 +12,7 @@ struct Pair{
 
 Pair<int,int> readConstant(){
     fstream newfile;
-    newfile.open("./modules/Module2/config.txt");
+    newfile.open("./Instructor_Solution/Module2/config.txt");
     int res1 = 0;
     int res2 = 0;
     if(newfile.is_open()){

@@ -6,7 +6,7 @@ using namespace std;
 
 int readConstant(){
     fstream newfile;
-    newfile.open("./modules/Module1/config.txt");
+    newfile.open("./Instructor_Solution/Module1/config.txt");
     int res = 0;
     if(newfile.is_open()){
         string tp;

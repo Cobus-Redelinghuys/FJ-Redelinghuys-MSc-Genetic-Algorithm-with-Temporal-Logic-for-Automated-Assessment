@@ -47,7 +47,7 @@ class ExmpleThread extends Thread{
     public static Integer[] readFile(){
         Integer[] returnVal = new Integer[3];
         try {
-            File myObj = new File("./modules/Module8/config.txt");
+            File myObj = new File("./Student_Solution/Module8/config.txt");
             Scanner myReader = new Scanner(myObj);
             int i = 0;
             while (myReader.hasNextLine()) {
