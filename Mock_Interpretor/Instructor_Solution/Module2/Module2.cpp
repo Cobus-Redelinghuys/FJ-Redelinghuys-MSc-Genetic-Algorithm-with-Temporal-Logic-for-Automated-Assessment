@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
     Pair<int, int> res = readConstant();
     int v = stoi(argv[1]);
     Position* obj;
-    if(res.d1 < v && res.d2 > v){
+    if(res.d1 <= v && res.d2 >= v){
         obj = new Inbound();
     }
     if(res.d1 > v || res.d2 < v){
