@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
     int n = readConstant();
     int v = stoi(argv[1]);
     Number* obj;
-    if(n > v){
+    if(n >= v){
         obj = new GreaterThan();
     }
     if(n < v){
