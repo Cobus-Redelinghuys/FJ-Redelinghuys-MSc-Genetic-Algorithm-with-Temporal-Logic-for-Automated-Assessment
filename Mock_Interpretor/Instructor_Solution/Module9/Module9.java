@@ -1,7 +1,7 @@
 public class Module9{
     public static void main(String[] args) {
         Number n1 = new Number(true);
-        Number.loop = Integer.parseInt(args[0]) * 100;
+        Number.loop = Integer.parseInt(args[0]);
         Number n2 = new Number(false);
         n1.start();
         n2.start();

@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Module7{
     public static void func(int n, int v){
         if(n < v){
-            func(n-1, v);
+            func(n, v-1);
         }
     }
 

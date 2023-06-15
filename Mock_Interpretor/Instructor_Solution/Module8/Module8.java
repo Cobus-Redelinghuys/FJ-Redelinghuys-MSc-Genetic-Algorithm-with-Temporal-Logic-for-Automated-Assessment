@@ -67,6 +67,9 @@ class ExmpleThread extends Thread{
 
     @Override
     public void run() {
+        if(index == nIndex){
+            return;
+        }
         for(int i=0; i < 100; i++){
             try{
                 locks[index].lock();

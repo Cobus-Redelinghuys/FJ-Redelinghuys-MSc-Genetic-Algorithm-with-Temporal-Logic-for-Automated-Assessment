@@ -25,6 +25,7 @@ public class Main{
         int v = Integer.parseInt(args[0]);
 
         while(n > v){
+            n--;
         }
         System.out.println("Finished Loop");
 

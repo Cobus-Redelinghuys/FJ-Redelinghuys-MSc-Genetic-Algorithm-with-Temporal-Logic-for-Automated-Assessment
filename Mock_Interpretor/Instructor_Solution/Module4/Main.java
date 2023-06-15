@@ -26,7 +26,7 @@ public class Main{
             arr[i] = i;
         }
         int index = Integer.parseInt(args[0]);
-        System.out.println(arr[index]);
+        System.out.println(arr[index%arr.length]);
 
     }
 }
