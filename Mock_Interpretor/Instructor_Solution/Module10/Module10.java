@@ -8,7 +8,7 @@ import java.lang.System;
 
 public class Module10 {
     public static void main(String[] args) {
-        StarvationExample starvationExample = new StarvationExample(Integer.parseInt(args[0]));
+        StarvationExample starvationExample = new StarvationExample(Math.abs(Integer.parseInt(args[0])));
         starvationExample.run();
     }
 }
@@ -37,6 +37,7 @@ class StarvationExample {
         Integer returnVal = 0;
         try {
             File myObj = new File("./Instructor_Solution/Module10/config.txt");
+            //File myObj = new File("./Config.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();

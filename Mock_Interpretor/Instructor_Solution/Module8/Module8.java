@@ -30,8 +30,8 @@ class ExmpleThread extends Thread{
     static Lock[] locks;
 
     ExmpleThread(int index, int nIndex){
-        this.index = index;
-        this.nIndex = nIndex;
+        this.index = Math.abs(index);
+        this.nIndex = Math.abs(nIndex);
     }
 
     static{
@@ -48,6 +48,7 @@ class ExmpleThread extends Thread{
         Integer[] returnVal = new Integer[3];
         try {
             File myObj = new File("./Instructor_Solution/Module8/config.txt");
+            //File myObj = new File("./config.txt");
             Scanner myReader = new Scanner(myObj);
             int i = 0;
             while (myReader.hasNextLine()) {
