@@ -8,7 +8,7 @@ import java.lang.System;
 
 public class Module10 {
     public static void main(String[] args) {
-        StarvationExample starvationExample = new StarvationExample(Math.abs(Integer.parseInt(args[0])));
+        StarvationExample starvationExample = new StarvationExample(Math.abs(Integer.parseInt(args[0])), args[1]);
         starvationExample.run();
     }
 }
@@ -19,8 +19,8 @@ class StarvationExample {
     static ArrayList<Integer> order;
     static int example;
 
-    public StarvationExample(int example){
-        int size = readFile();
+    public StarvationExample(int example, String path){
+        int size = readFile(path);
         for(int i=0; i <= size; i++){
             executorOrder.put(i, new ThreadExecutor(i));
         }
@@ -33,10 +33,10 @@ class StarvationExample {
         }
     }
     
-    public static Integer readFile(){
+    public static Integer readFile(String path){
         Integer returnVal = 0;
         try {
-            File myObj = new File("./Instructor_Solution/Module10/config.txt");
+            File myObj = new File(path+"/Instructor_Solution/Module10/config.txt");
             //File myObj = new File("./Config.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {

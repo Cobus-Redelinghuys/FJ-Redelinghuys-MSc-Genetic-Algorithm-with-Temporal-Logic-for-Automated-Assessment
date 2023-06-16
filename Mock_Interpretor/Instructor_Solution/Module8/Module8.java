@@ -6,7 +6,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Module8{
     public static void main(String[] args) {
         try{
-            Integer[] fileContents = ExmpleThread.readFile();
+            ExmpleThread.set(args[1]);
+            Integer[] fileContents = ExmpleThread.readFile(args[1]);
             ExmpleThread et1 = new ExmpleThread(Integer.parseInt(args[0]), fileContents[1]);
             ExmpleThread et2 = new ExmpleThread(fileContents[1], fileContents[2]);
             et1.start();
@@ -26,7 +27,7 @@ public class Module8{
 class ExmpleThread extends Thread{
     int index;
     int nIndex;
-    static final Boolean[] resources;
+    static Boolean[] resources;
     static Lock[] locks;
 
     ExmpleThread(int index, int nIndex){
@@ -34,8 +35,8 @@ class ExmpleThread extends Thread{
         this.nIndex = Math.abs(nIndex);
     }
 
-    static{
-        Integer[] fileContents = readFile();
+    static void set(String path){
+        Integer[] fileContents = readFile(path);
         resources = new Boolean[fileContents[0]];
         locks = new ReentrantLock[fileContents[0]];
         for(int i=0; i < resources.length; i++){
@@ -44,10 +45,10 @@ class ExmpleThread extends Thread{
         }
     }
 
-    public static Integer[] readFile(){
+    public static Integer[] readFile(String path){
         Integer[] returnVal = new Integer[3];
         try {
-            File myObj = new File("./Instructor_Solution/Module8/config.txt");
+            File myObj = new File(path+"/Instructor_Solution/Module8/config.txt");
             //File myObj = new File("./config.txt");
             Scanner myReader = new Scanner(myObj);
             int i = 0;

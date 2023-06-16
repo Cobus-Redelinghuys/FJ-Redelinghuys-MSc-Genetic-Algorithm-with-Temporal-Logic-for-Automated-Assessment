@@ -7,14 +7,17 @@ import org.json.simple.JSONObject;
 @SuppressWarnings("unchecked")
 public class App {
     public static void main(String[] args) throws Exception {
+        args = new String[]{"./"};
+        ModulesConfig.set(args[0]);
         Input input = null;
         try {
-            input = new Input();
+            input = new Input(args[0]);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        JSONArray studentResult = student(input);
+        
         JSONArray instructorResult = instructor(input);
+        JSONArray studentResult = student(input);
         JSONObject result = new JSONObject();
         JSONArray moduleResults = new JSONArray();
         HashMap<String, JSONObject> studentMap = new HashMap<>();

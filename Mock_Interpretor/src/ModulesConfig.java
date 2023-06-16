@@ -11,13 +11,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class ModulesConfig {
-    public static final ModuleConfig[] moduleConfigs;
+    public static ModuleConfig[] moduleConfigs;
 
-    static {
+    public static void set(String path) {
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
         try {
-            obj = jsonParser.parse(new FileReader("ModuleConfig.json"));
+            obj = jsonParser.parse(new FileReader(path+"ModuleConfig.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -26,7 +26,7 @@ public class ModulesConfig {
         ArrayList<ModuleConfig> tempArr = new ArrayList<>();
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jObject = (JSONObject) jsonArray.get(i);
-            tempArr.add(new ModuleConfig(jObject));
+            tempArr.add(new ModuleConfig(jObject, path));
         }
         moduleConfigs = tempArr.toArray(new ModuleConfig[0]);
     }
@@ -68,11 +68,12 @@ public class ModulesConfig {
 class ModuleConfig {
     public final String moduleName;
     public final boolean enabled;
-    public final String relativePath;
+    public final String executablePath;
     public final String executionCommand;
     public final int numberOfCLArguments;
+    public final String relativePath;
 
-    public ModuleConfig(JSONObject object) {
+    public ModuleConfig(JSONObject object, String relativePath) {
         Object res = null;
         try {
             res = object.get("moduleName");
@@ -98,7 +99,7 @@ class ModuleConfig {
             e.printStackTrace();
             res = true;
         } finally {
-            relativePath = (String) res;
+            executablePath = (String) res;
         }
 
         try {
@@ -118,6 +119,8 @@ class ModuleConfig {
         } finally {
             numberOfCLArguments = ((Long) res).intValue();
         }
+
+        this.relativePath = relativePath;
     }
 
     @SuppressWarnings("unchecked")
@@ -136,7 +139,8 @@ class ModuleConfig {
         try {
             start = LocalTime.now();
             Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec(executionCommand + " " + path + relativePath + " " + args);
+            Process process = runtime.exec(executionCommand + " " + path + executablePath + " " + args + " " + relativePath);
+            System.out.println(executionCommand + " " + path + executablePath + " " + args + " " + relativePath);
             InputStream inputStream = process.getInputStream();
             InputStreamReader isr = new InputStreamReader(inputStream);
             InputStream errorStream = process.getErrorStream();
@@ -177,12 +181,12 @@ class ModuleConfig {
 class Input {
     public final HashMap<String, String> moduleInputs;
 
-    public Input() throws InputException {
+    public Input(String path) throws InputException {
         HashMap<String, String> map = new HashMap<>();
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
         try {
-            obj = jsonParser.parse(new FileReader("Input.json"));
+            obj = jsonParser.parse(new FileReader(path+"Input.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }

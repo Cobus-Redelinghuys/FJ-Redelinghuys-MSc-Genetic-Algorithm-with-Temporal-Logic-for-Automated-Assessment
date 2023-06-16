@@ -2,10 +2,10 @@ import java.io.File;
 import java.util.Scanner;
 
 public class Main{
-    public static int readFile(){
+    public static int readFile(String path){
         int returnVal = 0;
         try {
-            File myObj = new File("./Instructor_Solution/Module4/config.txt");
+            File myObj = new File(path+"/Instructor_Solution/Module4/config.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -21,7 +21,8 @@ public class Main{
     }
     
     public static void main(String[] args) {
-        Integer[] arr = new Integer[readFile()];
+        String path = args[1];
+        Integer[] arr = new Integer[readFile(path)];
         for(int i=0; i < arr.length; i++){
             arr[i] = i;
         }

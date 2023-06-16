@@ -10,9 +10,9 @@ struct Pair{
     U d2;
 };
 
-Pair<int,int> readConstant(){
+Pair<int,int> readConstant(string path){
     fstream newfile;
-    newfile.open("./Instructor_Solution/Module2/config.txt");
+    newfile.open(path + "/Instructor_Solution/Module2/config.txt");
     int res1 = 0;
     int res2 = 0;
     if(newfile.is_open()){
@@ -49,8 +49,9 @@ class Outbound: public Position{
 };
 
 int main(int argc, char *argv[]){
-    Pair<int, int> res = readConstant();
     int v = stoi(argv[1]);
+    string path = argv[2];
+    Pair<int, int> res = readConstant(path);
     Position* obj;
     if(res.d1 <= v && res.d2 >= v){
         obj = new Inbound();

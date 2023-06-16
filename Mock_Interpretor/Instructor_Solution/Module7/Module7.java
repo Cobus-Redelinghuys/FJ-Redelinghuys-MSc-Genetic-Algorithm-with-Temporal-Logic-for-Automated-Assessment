@@ -8,10 +8,10 @@ public class Module7{
         }
     }
 
-    public static int readFile(){
+    public static int readFile(String path){
         int returnVal = 0;
         try {
-            File myObj = new File("./Instructor_Solution/Module7/config.txt");
+            File myObj = new File(path+"/Instructor_Solution/Module7/config.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -27,7 +27,7 @@ public class Module7{
     }
 
     public static void main(String[] args) {
-        int n = readFile();
+        int n = readFile(args[1]);
         int v = Integer.parseInt(args[0]);
         func(n,v);
     }

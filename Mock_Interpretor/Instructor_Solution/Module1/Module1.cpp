@@ -4,9 +4,9 @@
 
 using namespace std;
 
-int readConstant(){
+int readConstant(string path){
     fstream newfile;
-    newfile.open("./Instructor_Solution/Module1/config.txt");
+    newfile.open(path+"/Instructor_Solution/Module1/config.txt");
     int res = 0;
     if(newfile.is_open()){
         string tp;
@@ -37,8 +37,10 @@ class LessThan: public Number{
 };
 
 int main(int argc, char *argv[]){
-    int n = readConstant();
+    
     int v = stoi(argv[1]);
+    string path = argv[2];
+    int n = readConstant(path);
     Number* obj;
     if(n >= v){
         obj = new GreaterThan();
