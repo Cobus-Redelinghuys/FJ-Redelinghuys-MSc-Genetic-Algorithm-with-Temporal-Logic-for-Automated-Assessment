@@ -4,3 +4,5 @@ Mock_Interpretor/Mock_Interpretor - Copy.jar
 Mock_Interpretor/Output.json
 *.o
 Mock_Interpretor/Student_Output.json
+Mock_Interpretor/.vscode/launch.json
+Mock_Interpretor/Student_Output.json
