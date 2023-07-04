@@ -44,12 +44,12 @@ public class Stats {
 
     void avgAndBest(int gen){
         StatsNode sn = fitnessSets.get(gen);
-        Float best = Float.POSITIVE_INFINITY;
+        Float best = Float.NEGATIVE_INFINITY;
         Chromosome bestChrom = null;
         float sum = 0f;
         for (Chromosome chromosome : sn.fitnessSet.keySet()) {
             float fitness = sn.fitnessSet.get(chromosome);
-            if(fitness < best){
+            if(fitness > best){
                 best = fitness;
                 bestChrom = chromosome;
             }

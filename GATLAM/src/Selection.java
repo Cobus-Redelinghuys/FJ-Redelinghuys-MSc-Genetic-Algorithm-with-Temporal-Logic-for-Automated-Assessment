@@ -6,23 +6,23 @@ import java.util.HashSet;
 abstract public class Selection {
     abstract SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation);
 
-    static Selection getSelection(String selectionMethod){
-        if(selectionMethod.equals("RouletteSelection")){
+    static Selection getSelection(String selectionMethod) {
+        if (selectionMethod.equals("RouletteSelection")) {
             return new RouletteSelection();
         }
-        if(selectionMethod.equals("StochasticUniversalSampling")){
+        if (selectionMethod.equals("StochasticUniversalSampling")) {
             return new StochasticUniversalSampling();
         }
-        if(selectionMethod.equals("LinearRankSelection")){
+        if (selectionMethod.equals("LinearRankSelection")) {
             return new LinearRankSelection();
         }
-        if(selectionMethod.equals("ExponentialRankSelection")){
+        if (selectionMethod.equals("ExponentialRankSelection")) {
             return new ExponentialRankSelection();
         }
-        if(selectionMethod.equals("TournamentSelection")){
+        if (selectionMethod.equals("TournamentSelection")) {
             return new TournamentSelection();
         }
-        if(selectionMethod.equals("TruncationSelection")){
+        if (selectionMethod.equals("TruncationSelection")) {
             return new TruncationSelection();
         }
         throw new RuntimeException("Invalid Selection Method");
@@ -49,7 +49,9 @@ class RouletteSelection extends Selection {
         HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
-            fitnesses.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
+            float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+            chromosome.lastRecordedFitness = fitness;
+            fitnesses.put(chromosome, fitness);
         }
 
         float sum = 0;
@@ -59,12 +61,12 @@ class RouletteSelection extends Selection {
         HashMap<Chromosome, Float> probabilities = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
             float fit = fitnesses.get(chromosome);
-            if(sum == 0){
-                probabilities.put(chromosome,  0.0f);
-            } else{
-                probabilities.put(chromosome,  fit / sum);
+            if (sum == 0) {
+                probabilities.put(chromosome, 0.0f);
+            } else {
+                probabilities.put(chromosome, fit / sum);
             }
-            
+
         }
 
         HashSet<Chromosome> winnersSet = new HashSet<>();
@@ -98,7 +100,9 @@ class StochasticUniversalSampling extends Selection {
         HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
-            fitnesses.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
+            float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+            chromosome.lastRecordedFitness = fitness;
+            fitnesses.put(chromosome, fitness);
         }
 
         HashSet<Chromosome> winnersSet = winners(fitnesses);
@@ -158,7 +162,7 @@ class StochasticUniversalSampling extends Selection {
         for (Float ptr : pointers.values()) {
             int i = 0;
             fitSum = 0;
-            while (fitSum < ptr && i < fitnesses.size()-1) {
+            while (fitSum < ptr && i < fitnesses.size() - 1) {
                 fitSum += fitnesses.get(fitnesses.keySet().toArray(new Chromosome[0])[i]);
                 i++;
             }
@@ -178,7 +182,9 @@ class LinearRankSelection extends Selection {
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         HashMap<Float, ArrayList<Chromosome>> revFitness = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
-            fitnesses.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
+            float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+            chromosome.lastRecordedFitness = fitness;
+            fitnesses.put(chromosome, fitness);
             if (!revFitness.containsKey(fitnesses.get(chromosome))) {
                 revFitness.put(fitnesses.get(chromosome), new ArrayList<>());
             }
@@ -237,7 +243,9 @@ class ExponentialRankSelection extends Selection {
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         HashMap<Float, ArrayList<Chromosome>> revFitness = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
-            fitnesses.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
+            float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+            chromosome.lastRecordedFitness = fitness;
+            fitnesses.put(chromosome, fitness);
             if (!revFitness.containsKey(fitnesses.get(chromosome))) {
                 revFitness.put(fitnesses.get(chromosome), new ArrayList<>());
             }
@@ -309,7 +317,9 @@ class TournamentSelection extends Selection {
             interpertorResults.putAll(results);
             HashMap<Chromosome, Float> localFitness = new HashMap<>();
             for (Chromosome chromosome : results.keySet()) {
-                localFitness.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
+                float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+                chromosome.lastRecordedFitness = fitness;
+                localFitness.put(chromosome, fitness);
             }
             winners.add(winners(localFitness));
             fitnesses.putAll(localFitness);
@@ -324,14 +334,17 @@ class TournamentSelection extends Selection {
             interpertorResults.putAll(results);
             HashMap<Chromosome, Float> localFitness = new HashMap<>();
             for (Chromosome chromosome : results.keySet()) {
-                localFitness.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
+                float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+                chromosome.lastRecordedFitness = fitness;
+                localFitness.put(chromosome, fitness);
             }
             looosers.add(loosers(localFitness));
             fitnesses.putAll(localFitness);
         }
 
         StatsNode sn = new StatsNode(generation, fitnesses, interpertorResults);
-        SelectionResult result = new SelectionResult(winners.toArray(new Chromosome[0]), looosers.toArray(new Chromosome[0]), sn);
+        SelectionResult result = new SelectionResult(winners.toArray(new Chromosome[0]),
+                looosers.toArray(new Chromosome[0]), sn);
         return result;
     }
 
@@ -360,16 +373,18 @@ class TournamentSelection extends Selection {
     }
 }
 
-class TruncationSelection extends Selection{
+class TruncationSelection extends Selection {
     @Override
     SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
         Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
         HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
-        float bestFitness = Float.POSITIVE_INFINITY;
+        float bestFitness = Float.NEGATIVE_INFINITY;
         for (Chromosome chromosome : chromosomeArray) {
-            fitnesses.put(chromosome, Fitness.determineFitness(results.get(chromosome), generation, chromosome));
-            if(bestFitness > fitnesses.get(chromosome)){
+            float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+            chromosome.lastRecordedFitness = fitness;
+            fitnesses.put(chromosome, fitness);
+            if (bestFitness < fitnesses.get(chromosome)) {
                 bestFitness = fitnesses.get(chromosome);
             }
         }
@@ -377,13 +392,14 @@ class TruncationSelection extends Selection{
         HashSet<Chromosome> possibleWinners = new HashSet<>();
         HashSet<Chromosome> possibleLoosers = new HashSet<>();
         for (Chromosome chromosome : fitnesses.keySet()) {
-            if(fitnesses.get(chromosome) < Config.truncationSelectionPer * bestFitness){
+            if (fitnesses.get(chromosome) > Config.truncationSelectionPer * bestFitness) {
                 possibleWinners.add(chromosome);
             } else {
                 possibleLoosers.add(chromosome);
             }
         }
         StatsNode sn = new StatsNode(generation, fitnesses, results);
-        return new SelectionResult(possibleWinners.toArray(new Chromosome[0]), possibleLoosers.toArray(new Chromosome[0]), sn);
+        return new SelectionResult(possibleWinners.toArray(new Chromosome[0]),
+                possibleLoosers.toArray(new Chromosome[0]), sn);
     }
 }

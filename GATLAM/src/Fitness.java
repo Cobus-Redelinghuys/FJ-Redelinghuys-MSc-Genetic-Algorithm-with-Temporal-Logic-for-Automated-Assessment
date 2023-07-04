@@ -2,11 +2,22 @@ public class Fitness {
     public static float determineFitness(InterpretorResults[] output, int gen, Chromosome chromosome) {
         ChromosomeDBInfo chromosomeDBInfo = new ChromosomeDBInfo(chromosome, gen);
         ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
-        chromosomeDBInfo.ltl = LTL(output, chromosome, gen);
-        chromosomeDBInfo.m = M(output);
-        chromosomeDBInfo.g = ChromosomeDatabase.G(chromosome, gen);
-
+        float ltl = LTL(output, chromosome, gen);
         chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
+        chromosomeDBInfo.ltl = ltl;
+        ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
+        float m = M(output);
+        chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
+        chromosomeDBInfo.m = m;
+        ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
+        float g = ChromosomeDatabase.G(chromosome, gen);
+        chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
+        chromosomeDBInfo.g = g;
+        ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
+        chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
+        if(chromosomeDBInfo.m != 0){
+            ChromosomeDatabase.addChromosome(chromosome);
+        }
         return chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g;
     }
 

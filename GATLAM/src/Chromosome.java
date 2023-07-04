@@ -1,9 +1,12 @@
+import java.util.Arrays;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class Chromosome {
     final Integer[] genes = new Integer[Config.genes.length];
     final String bits;
+    public float lastRecordedFitness = 0;
 
     Chromosome() {
         String tempBits = "";
@@ -67,5 +70,20 @@ public class Chromosome {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("Input", jsonArray);
         return jsonObject.toJSONString();
+    }
+
+    @SuppressWarnings("unchecked")
+    JSONObject toJSON(){
+        JSONArray jsonArray = new JSONArray();
+        for (Integer gene : genes) {
+            jsonArray.add(gene);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Input", jsonArray);
+        return jsonObject;
+    }
+
+    String geneString(){
+        return Arrays.toString(genes);
     }
 }

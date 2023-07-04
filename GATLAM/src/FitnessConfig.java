@@ -98,7 +98,7 @@ class FitnessConfigField {
     public FitnessConfigField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = (Boolean) jsonObject.get("enabled");
-            weight = ((Long) jsonObject.get("weight")).floatValue();
+            weight = ((Double) jsonObject.get("weight")).floatValue();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Malformed safety property");
@@ -119,7 +119,7 @@ class IllegalOutputField {
     public IllegalOutputField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = (Boolean) jsonObject.get("enabled");
-            weight = ((Long) jsonObject.get("weight")).floatValue();
+            weight = ((Double) jsonObject.get("weight")).floatValue();
             JSONArray arr = (JSONArray) jsonObject.get("words");
             String[] res = new String[arr.size()];
             for (int i = 0; i < res.length; i++) {
@@ -147,7 +147,7 @@ class ExecutionTimeField {
     public ExecutionTimeField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = (Boolean) jsonObject.get("enabled");
-            weight = ((Long) jsonObject.get("weight")).floatValue();
+            weight = ((Double) jsonObject.get("weight")).floatValue();
             maxTime = (Long) jsonObject.get("maxTime");
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,7 +172,7 @@ class ExpectedOutputField {
     public ExpectedOutputField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = (Boolean) jsonObject.get("enabled");
-            weight = ((Long) jsonObject.get("weight")).floatValue();
+            weight = ((Double) jsonObject.get("weight")).floatValue();
             exactMatch = (Boolean) jsonObject.get("exactMatch");
             splitChar = (String) jsonObject.get("splittingChar");
 
