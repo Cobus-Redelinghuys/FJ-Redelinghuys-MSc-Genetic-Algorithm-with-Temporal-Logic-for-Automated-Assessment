@@ -16,8 +16,9 @@ public class App {
             e.printStackTrace();
         }
         
-        JSONArray instructorResult = instructor(input);
-        JSONArray studentResult = student(input);
+        JSONArray instructorResult = instructor(input, args[0]);
+        JSONArray studentResult = student(input, args[0]);
+        System.out.println("Finished with both instructor and student");
         JSONObject result = new JSONObject();
         JSONArray moduleResults = new JSONArray();
         HashMap<String, JSONObject> studentMap = new HashMap<>();
@@ -45,7 +46,8 @@ public class App {
         }
         result.put("results", moduleResults);
 
-        try (FileWriter file = new FileWriter("Output.json");) {
+        System.out.println("Finished creating json object");
+        try (FileWriter file = new FileWriter(args[0]+"/Output.json");) {
             file.write(result.toJSONString());
             file.flush();
         } catch (Exception e) {
@@ -54,10 +56,10 @@ public class App {
 
     }
 
-    static JSONArray instructor(Input input) {
-        JSONArray result = ModulesConfig.executeSystem(input, "./Instructor_Solution");
+    static JSONArray instructor(Input input, String path) {
+        JSONArray result = ModulesConfig.executeSystem(input, path+"./Instructor_Solution");
 
-        try (FileWriter file = new FileWriter("Instructor_Output.json");) {
+        try (FileWriter file = new FileWriter(path+"/Instructor_Output.json");) {
             file.write(result.toJSONString());
             file.flush();
         } catch (Exception e) {
@@ -82,10 +84,10 @@ public class App {
         return result;
     }
 
-    static JSONArray student(Input input) {
-        JSONArray result = ModulesConfig.executeSystem(input, "./Student_Solution");
+    static JSONArray student(Input input, String path) {
+        JSONArray result = ModulesConfig.executeSystem(input, path+"./Student_Solution");
 
-        try (FileWriter file = new FileWriter("Student_Output.json");) {
+        try (FileWriter file = new FileWriter(path+"/Student_Output.json");) {
             file.write(result.toJSONString());
             file.flush();
         } catch (Exception e) {

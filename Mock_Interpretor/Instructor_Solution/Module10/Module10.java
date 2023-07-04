@@ -58,7 +58,7 @@ class StarvationExample {
 
     public void run(){
         while(true){
-            for(int i=0; i < order.size(); i++){
+            for(Integer i: order){
                 System.out.println(i);
                 if(!executed.get(i).get()){
                     executed.replace(i, new AtomicBoolean(true));

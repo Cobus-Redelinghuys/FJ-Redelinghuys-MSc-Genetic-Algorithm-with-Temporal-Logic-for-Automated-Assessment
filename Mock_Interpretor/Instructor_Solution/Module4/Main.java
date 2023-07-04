@@ -26,7 +26,7 @@ public class Main{
         for(int i=0; i < arr.length; i++){
             arr[i] = i;
         }
-        int index = Integer.parseInt(args[0]);
+        int index = Math.abs(Integer.parseInt(args[0]));
         System.out.println(arr[index%arr.length]);
 
     }
