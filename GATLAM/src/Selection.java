@@ -349,10 +349,10 @@ class TournamentSelection extends Selection {
     }
 
     Chromosome winners(HashMap<Chromosome, Float> candidates) {
-        float bestFitnnes = Float.POSITIVE_INFINITY;
+        float bestFitnnes = Float.NEGATIVE_INFINITY;
         Chromosome bestChrom = null;
         for (Chromosome chromosome : candidates.keySet()) {
-            if (candidates.get(chromosome) < bestFitnnes) {
+            if (candidates.get(chromosome) > bestFitnnes) {
                 bestFitnnes = candidates.get(chromosome);
                 bestChrom = chromosome;
             }
@@ -361,10 +361,10 @@ class TournamentSelection extends Selection {
     }
 
     Chromosome loosers(HashMap<Chromosome, Float> candidates) {
-        float worstFitness = Float.NEGATIVE_INFINITY;
+        float worstFitness = Float.POSITIVE_INFINITY;
         Chromosome worstChrom = null;
         for (Chromosome chromosome : candidates.keySet()) {
-            if (candidates.get(chromosome) > worstFitness) {
+            if (candidates.get(chromosome) <  worstFitness) {
                 worstFitness = candidates.get(chromosome);
                 worstChrom = chromosome;
             }
