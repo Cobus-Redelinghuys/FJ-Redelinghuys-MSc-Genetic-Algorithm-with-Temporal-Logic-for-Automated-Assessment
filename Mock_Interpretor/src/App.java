@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 @SuppressWarnings("unchecked")
 public class App {
     public static void main(String[] args) throws Exception {
-        args = new String[]{"./"};
+        //args = new String[] { "./" };
         ModulesConfig.set(args[0]);
         Input input = null;
         try {
@@ -15,7 +15,7 @@ public class App {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         JSONArray instructorResult = instructor(input, args[0]);
         JSONArray studentResult = student(input, args[0]);
         System.out.println("Finished with both instructor and student");
@@ -24,30 +24,33 @@ public class App {
         HashMap<String, JSONObject> studentMap = new HashMap<>();
         HashMap<String, JSONObject> instructionMap = new HashMap<>();
         for (Object object : studentResult) {
-            JSONObject jsonObject = (JSONObject)object;
-            studentMap.put((String)jsonObject.get("moduleName"), jsonObject);
+            JSONObject jsonObject = (JSONObject) object;
+            studentMap.put((String) jsonObject.get("moduleName"), jsonObject);
         }
         for (Object object : instructorResult) {
-            JSONObject jsonObject = (JSONObject)object;
-            instructionMap.put((String)jsonObject.get("moduleName"), jsonObject);
+            JSONObject jsonObject = (JSONObject) object;
+            instructionMap.put((String) jsonObject.get("moduleName"), jsonObject);
         }
 
-        for (String moduleName : studentMap.keySet()) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("studentStdOut", studentMap.get(moduleName).get("stdout"));
-            jsonObject.put("studentErrOut", studentMap.get(moduleName).get("stderr"));
-            jsonObject.put("studentExeTime", studentMap.get(moduleName).get("duration"));
-            jsonObject.put("studentExitCode", studentMap.get(moduleName).get("exitvalue"));
-            jsonObject.put("instructorStdOut", instructionMap.get(moduleName).get("stdout"));
-            jsonObject.put("instructorErrOut", instructionMap.get(moduleName).get("stderr"));
-            jsonObject.put("instructorExeTime", instructionMap.get(moduleName).get("duration"));
-            jsonObject.put("instructorExitCode", instructionMap.get(moduleName).get("exitvalue"));
-            moduleResults.add(jsonObject);
+        for (int i = 0; i < 10; i++) {
+            String moduleName = "Module" + i;
+            if (studentMap.containsKey(moduleName)) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("studentStdOut", studentMap.get(moduleName).get("stdout"));
+                jsonObject.put("studentErrOut", studentMap.get(moduleName).get("stderr"));
+                jsonObject.put("studentExeTime", studentMap.get(moduleName).get("duration"));
+                jsonObject.put("studentExitCode", studentMap.get(moduleName).get("exitvalue"));
+                jsonObject.put("instructorStdOut", instructionMap.get(moduleName).get("stdout"));
+                jsonObject.put("instructorErrOut", instructionMap.get(moduleName).get("stderr"));
+                jsonObject.put("instructorExeTime", instructionMap.get(moduleName).get("duration"));
+                jsonObject.put("instructorExitCode", instructionMap.get(moduleName).get("exitvalue"));
+                moduleResults.add(jsonObject);
+            }
         }
         result.put("results", moduleResults);
 
         System.out.println("Finished creating json object");
-        try (FileWriter file = new FileWriter(args[0]+"/Output.json");) {
+        try (FileWriter file = new FileWriter(args[0] + "/Output.json");) {
             file.write(result.toJSONString());
             file.flush();
         } catch (Exception e) {
@@ -57,9 +60,9 @@ public class App {
     }
 
     static JSONArray instructor(Input input, String path) {
-        JSONArray result = ModulesConfig.executeSystem(input, path+"./Instructor_Solution");
+        JSONArray result = ModulesConfig.executeSystem(input, path + "./Instructor_Solution");
 
-        try (FileWriter file = new FileWriter(path+"/Instructor_Output.json");) {
+        try (FileWriter file = new FileWriter(path + "/Instructor_Output.json");) {
             file.write(result.toJSONString());
             file.flush();
         } catch (Exception e) {
@@ -85,9 +88,9 @@ public class App {
     }
 
     static JSONArray student(Input input, String path) {
-        JSONArray result = ModulesConfig.executeSystem(input, path+"./Student_Solution");
+        JSONArray result = ModulesConfig.executeSystem(input, path + "./Student_Solution");
 
-        try (FileWriter file = new FileWriter(path+"/Student_Output.json");) {
+        try (FileWriter file = new FileWriter(path + "/Student_Output.json");) {
             file.write(result.toJSONString());
             file.flush();
         } catch (Exception e) {

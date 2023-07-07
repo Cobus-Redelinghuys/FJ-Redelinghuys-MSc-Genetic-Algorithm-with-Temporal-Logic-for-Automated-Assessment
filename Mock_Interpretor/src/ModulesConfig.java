@@ -41,6 +41,7 @@ public class ModulesConfig {
          * }
          */
         ModuleRunner[] moduleRunners = new ModuleRunner[moduleConfigs.length];
+        HashMap<Integer, JSONObject> tempResults = new HashMap<>();
         for (int i = 0; i < moduleRunners.length; i++) {
             moduleRunners[i] = new ModuleRunner(moduleConfigs[i],
                     input.moduleInputs.get(moduleConfigs[i].moduleName),
@@ -53,11 +54,17 @@ public class ModulesConfig {
             for (int i = 0; i < moduleRunners.length; i++) {
                 if (moduleRunners[i].moduleConfig.enabled) {
                     moduleRunners[i].join();
-                    result.add(moduleRunners[i].getResults());
+                    tempResults.put(i, moduleRunners[i].getResults());
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        for(int i=0; i < moduleRunners.length; i++){
+            if(tempResults.containsKey(i)){
+                result.add(tempResults.get(i));
+            }
         }
 
         return result;
