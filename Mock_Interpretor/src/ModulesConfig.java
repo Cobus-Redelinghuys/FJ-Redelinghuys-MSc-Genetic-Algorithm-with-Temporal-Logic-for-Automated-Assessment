@@ -47,13 +47,13 @@ public class ModulesConfig {
                     input.moduleInputs.get(moduleConfigs[i].moduleName),
                     path);
             if (moduleRunners[i].moduleConfig.enabled) {
-                moduleRunners[i].start();
+                moduleRunners[i].run();
             }
         }
         try {
             for (int i = 0; i < moduleRunners.length; i++) {
                 if (moduleRunners[i].moduleConfig.enabled) {
-                    moduleRunners[i].join();
+                    //moduleRunners[i].join();
                     tempResults.put(i, moduleRunners[i].getResults());
                 }
             }
@@ -243,7 +243,7 @@ class ProcessMonitor extends Thread {
     }
 }
 
-class ModuleRunner extends Thread {
+class ModuleRunner {
     public final ModuleConfig moduleConfig;
     public final String input;
     public JSONObject result = null;
@@ -255,7 +255,7 @@ class ModuleRunner extends Thread {
         this.path = path;
     }
 
-    @Override
+    //@Override
     public void run() {
         result = moduleConfig.executeModule(input, path);
     }
