@@ -203,6 +203,8 @@ class ExpectedOutputField {
             Collections.addAll(studentLines, output.studentStdOut.split(splitChar));
             ArrayList<String> instructorLines = new ArrayList<>();
             Collections.addAll(instructorLines, output.instructorStdOut.split(splitChar));
+            possibles = instructorLines.size();
+            penalty = studentLines.size();
             while (!instructorLines.isEmpty() && !studentLines.isEmpty()) {
                 String studentLine = studentLines.get(0);
                 if (instructorLines.contains(studentLine)) {
@@ -211,11 +213,9 @@ class ExpectedOutputField {
                 studentLines.remove(studentLine);
                 instructorLines.remove(studentLine);
             }
-            possibles = instructorLines.size();
-            penalty = studentLines.size();
         }
 
-        float result = ((float) matched - (float) penalty) / (float) possibles;
+        float result = Math.abs(((float) matched - (float) penalty)) / (float) possibles;
         return result;
     }
 

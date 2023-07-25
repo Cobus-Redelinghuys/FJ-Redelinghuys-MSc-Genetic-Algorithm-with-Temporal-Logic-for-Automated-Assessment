@@ -10,12 +10,14 @@ public class Fitness {
         chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
         chromosomeDBInfo.m = m;
         ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
-        float g = ChromosomeDatabase.G(chromosome, gen);
+        if (m > 0) {
+            float g = ChromosomeDatabase.G(chromosome, gen);
+            chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
+            chromosomeDBInfo.g = g;
+            ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
+        }
         chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
-        chromosomeDBInfo.g = g;
-        ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
-        chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
-        if(chromosomeDBInfo.m != 0){
+        if (chromosomeDBInfo.m != 0) {
             ChromosomeDatabase.addChromosome(chromosome);
         }
         return chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g;
@@ -39,7 +41,7 @@ public class Fitness {
             res += chromosomeDBInfo.ExecutionTime;
             chromosomeDBInfo.IllegalOutput += IllegalOutput(interpretorResults);
             res += chromosomeDBInfo.IllegalOutput;
-            chromosomeDBInfo.ExpectedOutput +=ExpectedOutput(interpretorResults);
+            chromosomeDBInfo.ExpectedOutput += ExpectedOutput(interpretorResults);
             res += chromosomeDBInfo.ExpectedOutput;
             result += res;
         }
@@ -48,43 +50,41 @@ public class Fitness {
         return (float) Config.LTLWeight * result;
     }
 
-    private static float M(InterpretorResults[] output){
+    private static float M(InterpretorResults[] output) {
         float result = 0;
 
         for (InterpretorResults interpretorResults : output) {
-            if(Safety(interpretorResults) > 0){
+            if (Safety(interpretorResults) > 0) {
                 result++;
                 continue;
             }
-            if(Livelyness(interpretorResults) > 0){
+            if (Livelyness(interpretorResults) > 0) {
                 result++;
                 continue;
             }
-            if(SegFault(interpretorResults) > 0){
+            if (SegFault(interpretorResults) > 0) {
                 result++;
                 continue;
             }
-            if(Exception(interpretorResults) > 0){
+            if (Exception(interpretorResults) > 0) {
                 result++;
                 continue;
             }
-            if(ExecutionTime(interpretorResults) > 0){
+            if (ExecutionTime(interpretorResults) > 0) {
                 result++;
                 continue;
             }
-            if(IllegalOutput(interpretorResults) > 0){
+            if (IllegalOutput(interpretorResults) > 0) {
                 result++;
                 continue;
             }
-            if(ExpectedOutput(interpretorResults) > 0){
+            if (ExpectedOutput(interpretorResults) > 0) {
                 result++;
                 continue;
             }
         }
         return result * Config.MWeight;
     }
-
-
 
     private static float Safety(InterpretorResults output) {
         if (!FitnessConfig.Safety.enabled) {
@@ -188,6 +188,7 @@ public class Fitness {
             return 0;
 
         float result = FitnessConfig.ExpectedOutput.constantExpected(output);
+        //float result = FitnessConfig.ExpectedOutput.
 
         result = (float) (FitnessConfig.ExpectedOutput.weight * result);
         return result;

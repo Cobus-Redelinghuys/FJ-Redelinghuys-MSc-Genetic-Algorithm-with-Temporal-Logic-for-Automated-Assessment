@@ -100,15 +100,19 @@ class ChromosomeDBInfo {
     public float ExecutionTime;
     public float IllegalOutput;
     public float ExpectedOutput;
-    public float m;
-    public float g;
-    public float ltl;
+    public float m = 0;
+    public float g = 0;
+    public float ltl = 0;
     public float[] gSubValues;
     public int gen;
 
     ChromosomeDBInfo(Chromosome chromosome, int gen) {
         this.chromosome = chromosome;
         this.gen = gen;
+        gSubValues = new float[chromosome.genes.length];
+        for(int i=0; i < chromosome.genes.length; i++){
+            gSubValues[i] = 0;
+        }
     }
 
     @SuppressWarnings("unchecked")
