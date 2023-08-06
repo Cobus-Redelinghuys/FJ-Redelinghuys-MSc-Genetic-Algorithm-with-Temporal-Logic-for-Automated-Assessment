@@ -72,6 +72,7 @@ public class GeneticAlgorithm {
                     }
                 }
             }
+            ChromosomeDatabase.addGenerationInfo();
             LocalDateTime generationEndTime = LocalDateTime.now();
             stats.addStats(selectionResult.statsNode, population,
                     ChronoUnit.MILLIS.between(generationStartTime, generationEndTime));

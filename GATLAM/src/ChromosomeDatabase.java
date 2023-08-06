@@ -11,6 +11,26 @@ public class ChromosomeDatabase {
     static HashMap<Integer, ArrayList<Chromosome>>[] db;
     static HashMap<Integer, HashMap<Chromosome, ChromosomeDBInfo>> chromosomeDBInfo = new HashMap<>();
 
+    static HashMap<Integer, HashMap<Chromosome, ChromosomeDBInfo>> genChromosomeDBInfo = new HashMap<>();
+
+    public static void addGenerationInfo(){
+        chromosomeDBInfo.putAll(genChromosomeDBInfo);
+        for (Integer gen : genChromosomeDBInfo.keySet()) {
+            for (Chromosome chromosome : genChromosomeDBInfo.get(gen).keySet()) {
+                addChromosome(chromosome);
+            }
+        }
+        genChromosomeDBInfo = new HashMap<>();
+    }
+
+    static int numChromosomesEvaluated(){
+        int count =0;
+        for (int gen : chromosomeDBInfo.keySet()) {
+            count += chromosomeDBInfo.get(gen).size();
+        }
+        return count;
+    }
+
     static {
         db = new HashMap[Config.genes.length];
         for (int i = 0; i < db.length; i++) {
@@ -29,18 +49,22 @@ public class ChromosomeDatabase {
     }
 
     static void addDBInfo(ChromosomeDBInfo cDBInfo) {
-        if (!chromosomeDBInfo.containsKey(cDBInfo.gen)) {
-            chromosomeDBInfo.put(cDBInfo.gen, new HashMap<>());
+        if (!genChromosomeDBInfo.containsKey(cDBInfo.gen)) {
+            genChromosomeDBInfo.put(cDBInfo.gen, new HashMap<>());
         }
 
-        if (!chromosomeDBInfo.get(cDBInfo.gen).containsKey(cDBInfo.chromosome)) {
-            chromosomeDBInfo.get(cDBInfo.gen).put(cDBInfo.chromosome, cDBInfo);
+        if (!genChromosomeDBInfo.get(cDBInfo.gen).containsKey(cDBInfo.chromosome)) {
+            genChromosomeDBInfo.get(cDBInfo.gen).put(cDBInfo.chromosome, cDBInfo);
         } else {
-            chromosomeDBInfo.get(cDBInfo.gen).put(cDBInfo.chromosome, cDBInfo);
+            genChromosomeDBInfo.get(cDBInfo.gen).put(cDBInfo.chromosome, cDBInfo);
         }
     }
 
     static ChromosomeDBInfo get(Chromosome chromosome, int gen) {
+        return genChromosomeDBInfo.get(gen).get(chromosome);
+    }
+
+    static ChromosomeDBInfo getDB(Chromosome chromosome, int gen){
         return chromosomeDBInfo.get(gen).get(chromosome);
     }
 
@@ -52,15 +76,15 @@ public class ChromosomeDatabase {
             if (db[i].containsKey(chromosome.genes[i])) {
                 int size = db[i].get(chromosome.genes[i]).size();
                 int tGen = gen+1;
-                sum += (float) size / (float) tGen;
-                chromosomeDBInfo.gSubValues[i] = (float) size / (float) tGen;
+                sum += (float) size / (float) numChromosomesEvaluated();
+                chromosomeDBInfo.gSubValues[i] = (float) size / (float) numChromosomesEvaluated();
             } else {
                 sum += 0;
                 chromosomeDBInfo.gSubValues[i] = 0;
             }
         }
         addDBInfo(chromosomeDBInfo);
-        return sum * Config.GWeight;
+        return (sum / chromosome.genes.length) * Config.GWeight;
     }
 
     static JSONObject dbDump() {

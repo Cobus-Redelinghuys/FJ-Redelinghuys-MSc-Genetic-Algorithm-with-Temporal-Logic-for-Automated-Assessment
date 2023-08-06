@@ -10,44 +10,63 @@ public class Fitness {
         chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
         chromosomeDBInfo.m = m;
         ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
-        if (m > 0) {
+        if (MContained(output)) {
             float g = ChromosomeDatabase.G(chromosome, gen);
             chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
             chromosomeDBInfo.g = g;
             ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
         }
         chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
-        if (chromosomeDBInfo.m != 0) {
-            ChromosomeDatabase.addChromosome(chromosome);
-        }
-        return chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g;
+        return (chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g) / (Config.GWeight + Config.LTLWeight + Config.MWeight);
     }
 
     private static float LTL(InterpretorResults[] output, Chromosome chromosome, int gen) {
         float result = 0;
         ChromosomeDBInfo chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
 
+        float tSafety = 0;
+        float tLivelyness = 0;
+        float tSegFault = 0;
+        float tException = 0;
+        float tExecutionTime = 0;
+        float tIllegalOutput = 0;
+        float tExpectedOutput = 0;
+
         for (InterpretorResults interpretorResults : output) {
             float res = 0;
-            chromosomeDBInfo.Safety += Safety(interpretorResults);
-            res += chromosomeDBInfo.Safety;
-            chromosomeDBInfo.Livelyness += Livelyness(interpretorResults);
-            res += chromosomeDBInfo.Livelyness;
-            chromosomeDBInfo.SegFault += SegFault(interpretorResults);
-            res += chromosomeDBInfo.SegFault;
-            chromosomeDBInfo.Exceptions += Exception(interpretorResults);
-            res += chromosomeDBInfo.Exceptions;
-            chromosomeDBInfo.ExecutionTime += ExecutionTime(interpretorResults);
-            res += chromosomeDBInfo.ExecutionTime;
-            chromosomeDBInfo.IllegalOutput += IllegalOutput(interpretorResults);
-            res += chromosomeDBInfo.IllegalOutput;
-            chromosomeDBInfo.ExpectedOutput += ExpectedOutput(interpretorResults);
-            res += chromosomeDBInfo.ExpectedOutput;
-            result += res;
-        }
+            float safety = Safety(interpretorResults);
+            res += safety;
+            float livelyness = Livelyness(interpretorResults);
+            res += livelyness;
+            float segFault = SegFault(interpretorResults);
+            res += livelyness;
+            float exceptions = Exception(interpretorResults);
+            res += exceptions;
+            float executionTime = ExecutionTime(interpretorResults);
+            res += executionTime;
+            float illegalOutput = IllegalOutput(interpretorResults);
+            res += illegalOutput;
+            float expectedOutput = ExpectedOutput(interpretorResults);
+            res += expectedOutput;
+            result += res / FitnessConfig.weightsOfActiveProperties;
+            tSafety += safety;
+            tLivelyness += livelyness;
+            tSegFault += segFault;
+            tException += exceptions;
+            tExecutionTime += executionTime;
+            tIllegalOutput += illegalOutput;
+            tExpectedOutput += expectedOutput;
 
+        }
+        chromosomeDBInfo.Safety = tSafety;
+        chromosomeDBInfo.Livelyness = tLivelyness;
+        chromosomeDBInfo.SegFault = tSegFault;
+        chromosomeDBInfo.Exceptions = tException;
+        chromosomeDBInfo.ExecutionTime = tExecutionTime;
+        chromosomeDBInfo.IllegalOutput = tIllegalOutput;
+        chromosomeDBInfo.ExpectedOutput = tExpectedOutput;
         ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
-        return (float) Config.LTLWeight * result;
+        return (((float) Config.LTLWeight * result)/output.length);
     }
 
     private static float M(InterpretorResults[] output) {
@@ -83,7 +102,43 @@ public class Fitness {
                 continue;
             }
         }
-        return result * Config.MWeight;
+        return (result/output.length) * Config.MWeight;
+    }
+
+    private static boolean MContained(InterpretorResults[] output) {
+        float result = 0;
+
+        for (InterpretorResults interpretorResults : output) {
+            if (Safety(interpretorResults) > 0) {
+                result++;
+                continue;
+            }
+            if (Livelyness(interpretorResults) > 0) {
+                result++;
+                continue;
+            }
+            if (SegFault(interpretorResults) > 0) {
+                result++;
+                continue;
+            }
+            if (Exception(interpretorResults) > 0) {
+                result++;
+                continue;
+            }
+            if (ExecutionTime(interpretorResults) > 0) {
+                result++;
+                continue;
+            }
+            if (IllegalOutput(interpretorResults) > 0) {
+                result++;
+                continue;
+            }
+            if (ExpectedOutput(interpretorResults) > 0) {
+                result++;
+                continue;
+            }
+        }
+        return result > 0;
     }
 
     private static float Safety(InterpretorResults output) {
@@ -97,7 +152,7 @@ public class Fitness {
             result += 1;
         }
 
-        return result;
+        return ((float)result * FitnessConfig.Safety.weight);
     }
 
     private static float Livelyness(InterpretorResults output) {
@@ -157,7 +212,7 @@ public class Fitness {
 
         float result = 0;
 
-        if (output.studentExitCode > FitnessConfig.ExecutionTime.maxTime) {
+        if (output.studentExeTime > FitnessConfig.ExecutionTime.maxTime) {
             result += 1;
         }
         result = (float) FitnessConfig.ExecutionTime.weight * result;

@@ -34,7 +34,6 @@ public class Config {
     public static final Interpretor interpretor;
 
     public static final Selection selectionMethod;
-
     
     static {
         JSONParser jsonParser = new JSONParser();

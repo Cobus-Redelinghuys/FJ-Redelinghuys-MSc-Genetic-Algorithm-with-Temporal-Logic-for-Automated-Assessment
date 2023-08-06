@@ -15,9 +15,12 @@ public class FitnessConfig {
     public static final IllegalOutputField IllegalOutput;
     public static final ExpectedOutputField ExpectedOutput;
 
+    public static final float weightsOfActiveProperties;
+
     static {
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
+        int tempActive = 0;
         try {
             obj = ((JSONObject) jsonParser.parse(new FileReader("Config.json"))).get("FitnessFunction");
         } catch (Exception e) {
@@ -32,6 +35,9 @@ public class FitnessConfig {
             res = new FitnessConfigField();
         } finally {
             Safety = (FitnessConfigField) res;
+            if(Safety.enabled){
+                tempActive += Safety.weight;
+            }
         }
 
         try {
@@ -41,6 +47,9 @@ public class FitnessConfig {
             res = new FitnessConfigField();
         } finally {
             Livelyness = (FitnessConfigField) res;
+            if(Livelyness.enabled){
+                tempActive += Livelyness.weight;
+            }
         }
 
         try {
@@ -50,6 +59,9 @@ public class FitnessConfig {
             res = new FitnessConfigField();
         } finally {
             SegFault = (FitnessConfigField) res;
+            if(SegFault.enabled){
+                tempActive += SegFault.weight;
+            }
         }
 
         try {
@@ -59,6 +71,9 @@ public class FitnessConfig {
             res = new FitnessConfigField();
         } finally {
             Exceptions = (FitnessConfigField) res;
+            if(Exceptions.enabled){
+                tempActive += Exceptions.weight;
+            }
         }
 
         try {
@@ -68,6 +83,9 @@ public class FitnessConfig {
             res = new ExecutionTimeField();
         } finally {
             ExecutionTime = (ExecutionTimeField) res;
+            if(ExecutionTime.enabled){
+                tempActive += ExecutionTime.weight;
+            }
         }
 
         try {
@@ -77,6 +95,9 @@ public class FitnessConfig {
             res = new IllegalOutputField();
         } finally {
             IllegalOutput = (IllegalOutputField) res;
+            if(IllegalOutput.enabled){
+                tempActive += IllegalOutput.weight;
+            }
         }
 
         try {
@@ -86,7 +107,11 @@ public class FitnessConfig {
             res = new ExpectedOutputField();
         } finally {
             ExpectedOutput = (ExpectedOutputField) res;
+            if(ExpectedOutput.enabled){
+                tempActive+= ExpectedOutput.weight;
+            }
         }
+        weightsOfActiveProperties = tempActive;
     }
 
 }
@@ -195,9 +220,9 @@ class ExpectedOutputField {
         int penalty = 0;
         if (exactMatch) {
             if (output.studentStdOut.equals(output.instructorStdOut)) {
-                matched++;
+                return 0;
             }
-            possibles++;
+            return 1;
         } else {
             ArrayList<String> studentLines = new ArrayList<>();
             Collections.addAll(studentLines, output.studentStdOut.split(splitChar));

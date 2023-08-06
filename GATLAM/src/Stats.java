@@ -150,7 +150,7 @@ class StatsNode{
             }
             jsonObject.put("genes", genes);
             jsonObject.put("fitness", fitnessSet.get(chromosome));
-            jsonObject.put("fitnessBreakdown", ChromosomeDatabase.get(chromosome, generation).toJSON());
+            jsonObject.put("fitnessBreakdown", ChromosomeDatabase.getDB(chromosome, generation).toJSON());
             JSONArray irResults = new JSONArray();
             for (InterpretorResults irResult : interpretorResults.get(chromosome)) {
                 irResults.add(irResult.toJSON());
