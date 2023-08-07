@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 abstract public class Selection {
     abstract SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation);
@@ -113,15 +115,27 @@ class StochasticUniversalSampling extends Selection {
     }
 
     HashSet<Chromosome> winners(HashMap<Chromosome, Float> fitnesses) {
+
         float sum = 0;
         for (Float fal : fitnesses.values()) {
-            sum += 1 - fal;
+            sum += fal;
         }
 
-        float P = sum / Config.tournamentSize;
+        ArrayList<Float> sortedFitness = new ArrayList<>(fitnesses.values());
+        Collections.sort(sortedFitness);
+        HashMap<Float, ArrayList<Chromosome>> sortedChromosomes = new HashMap<>();
+        for (Chromosome chromosome : fitnesses.keySet()) {
+            if(!sortedChromosomes.containsKey(fitnesses.get(chromosome))){
+                sortedChromosomes.put(fitnesses.get(chromosome), new ArrayList<>());
+            }
+            sortedChromosomes.get(fitnesses.get(chromosome)).add(chromosome);
+        }
+
+        int number = Config.tournamentSize * Config.numContestants;
+        float P = sum / number;
         float start = Config.random.nextFloat() * P;
         HashMap<Integer, Float> pointers = new HashMap<>();
-        for (int i = 0; i < Config.tournamentSize; i++) {
+        for (int i = 0; i < number; i++) {
             pointers.put(i, start + i * P);
         }
 
@@ -132,26 +146,40 @@ class StochasticUniversalSampling extends Selection {
         for (Float ptr : pointers.values()) {
             int i = 0;
             fitSum = 0;
-            while (fitSum < ptr) {
+            while (fitSum < ptr && i+1 < fitnesses.keySet().toArray(new Chromosome[0]).length) {
+                //fitSum += fitnesses.get(fitnesses.keySet().toArray(new Chromosome[0])[i])/sum;
+                fitSum += sortedFitness.get(i);
                 i++;
-                fitSum += fitnesses.get(fitnesses.keySet().toArray(new Chromosome[0])[i]);
             }
-            keep.add(fitnesses.keySet().toArray(new Chromosome[0])[i]);
+            //keep.add(fitnesses.keySet().toArray(new Chromosome[0])[i]);
+            keep.add(sortedChromosomes.get(sortedFitness.get(i)).get(Config.random.nextInt(sortedChromosomes.get(sortedFitness.get(i)).size())));
         }
 
         return keep;
     }
 
     HashSet<Chromosome> loosers(HashMap<Chromosome, Float> fitnesses) {
-        float sum = 0;
+        
+        float sum = 1;
         for (Float fal : fitnesses.values()) {
             sum += fal;
         }
 
-        float P = sum / Config.tournamentSize;
+        ArrayList<Float> sortedFitness = new ArrayList<>(fitnesses.values());
+        Collections.sort(sortedFitness, Collections.reverseOrder());
+        HashMap<Float, ArrayList<Chromosome>> sortedChromosomes = new HashMap<>();
+        for (Chromosome chromosome : fitnesses.keySet()) {
+            if(!sortedChromosomes.containsKey(fitnesses.get(chromosome))){
+                sortedChromosomes.put(fitnesses.get(chromosome), new ArrayList<>());
+            }
+            sortedChromosomes.get(fitnesses.get(chromosome)).add(chromosome);
+        }
+
+        int number = Config.tournamentSize * Config.numContestants;
+        float P = sum / number;
         float start = Config.random.nextFloat() * P;
         HashMap<Integer, Float> pointers = new HashMap<>();
-        for (int i = 0; i < Config.tournamentSize; i++) {
+        for (int i = 0; i < number; i++) {
             pointers.put(i, start + i * P);
         }
 
@@ -163,14 +191,15 @@ class StochasticUniversalSampling extends Selection {
             int i = 0;
             fitSum = 0;
             while (fitSum < ptr && i < fitnesses.size() - 1) {
-                fitSum += fitnesses.get(fitnesses.keySet().toArray(new Chromosome[0])[i]);
+                //fitSum += fitnesses.get(fitnesses.keySet().toArray(new Chromosome[0])[i]);
+                fitSum += sortedFitness.get(i);
                 i++;
             }
-            keep.add(fitnesses.keySet().toArray(new Chromosome[0])[i]);
+            //keep.add(fitnesses.keySet().toArray(new Chromosome[0])[i]);
+            keep.add(sortedChromosomes.get(sortedFitness.get(i)).get(Config.random.nextInt(sortedChromosomes.get(sortedFitness.get(i)).size())));
         }
 
         return keep;
-
     }
 }
 
@@ -211,7 +240,7 @@ class LinearRankSelection extends Selection {
     HashSet<Chromosome> winners(HashMap<Chromosome, Integer> randFitness, int n) {
         HashSet<Chromosome> result = new HashSet<>();
         Chromosome[] chromosomes = randFitness.keySet().toArray(new Chromosome[0]);
-        while (result.size() <= Config.tournamentSize) {
+        while (result.size() <= Config.tournamentSize * Config.numContestants) {
             int pos = Config.random.nextInt(chromosomes.length);
             float p = randFitness.get(chromosomes[pos]) / (float) (n * (n - 1));
             if (p < Config.random.nextFloat()) {
@@ -224,7 +253,7 @@ class LinearRankSelection extends Selection {
     HashSet<Chromosome> loosers(HashMap<Chromosome, Integer> randFitness, int n) {
         HashSet<Chromosome> result = new HashSet<>();
         Chromosome[] chromosomes = randFitness.keySet().toArray(new Chromosome[0]);
-        while (result.size() <= Config.tournamentSize) {
+        while (result.size() <= Config.tournamentSize * Config.numContestants) {
             int pos = Config.random.nextInt(chromosomes.length);
             float p = randFitness.get(chromosomes[pos]) / (float) (n * (n - 1));
             if (1 - p < Config.random.nextFloat()) {
@@ -364,7 +393,7 @@ class TournamentSelection extends Selection {
         float worstFitness = Float.POSITIVE_INFINITY;
         Chromosome worstChrom = null;
         for (Chromosome chromosome : candidates.keySet()) {
-            if (candidates.get(chromosome) <  worstFitness) {
+            if (candidates.get(chromosome) < worstFitness) {
                 worstFitness = candidates.get(chromosome);
                 worstChrom = chromosome;
             }
