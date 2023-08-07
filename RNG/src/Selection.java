@@ -7,26 +7,34 @@ abstract public class Selection {
     abstract SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation);
 
     static Selection getSelection(String selectionMethod) {
-        if (selectionMethod.equals("RouletteSelection")) {
-            return new RouletteSelection();
-        }
-        if (selectionMethod.equals("StochasticUniversalSampling")) {
-            return new StochasticUniversalSampling();
-        }
-        if (selectionMethod.equals("LinearRankSelection")) {
-            return new LinearRankSelection();
-        }
-        if (selectionMethod.equals("ExponentialRankSelection")) {
-            return new ExponentialRankSelection();
-        }
-        if (selectionMethod.equals("TournamentSelection")) {
-            return new TournamentSelection();
-        }
-        if (selectionMethod.equals("TruncationSelection")) {
-            return new TruncationSelection();
-        }
-        throw new RuntimeException("Invalid Selection Method");
+        return new RandomSelection();
     }
+}
+
+class RandomSelection extends Selection{
+
+    @Override
+    SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
+        int numSelected = Config.tournamentSize * Config.numContestants;
+        Chromosome[] selected = new Chromosome[numSelected];
+        for(int i=0; i < numSelected; i++){
+            selected[i] = population.toArray(new Chromosome[0])[Config.random.nextInt(population.size())];
+        }
+        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(selected);
+        HashMap<Chromosome, Float> fitnesses = new HashMap<>();
+        HashSet<Chromosome> winnersSet = new HashSet<>();
+        HashSet<Chromosome> loosersSet = new HashSet<>();
+        for (Chromosome chromosome : selected) {
+            float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
+            chromosome.lastRecordedFitness = fitness;
+            fitnesses.put(chromosome, fitness);
+            winnersSet.add(chromosome);
+        }
+        StatsNode sn = new StatsNode(generation, fitnesses, results);
+        return new SelectionResult(winnersSet.toArray(new Chromosome[0]), loosersSet.toArray(new Chromosome[0]), sn);
+        
+    }
+    
 }
 
 class SelectionResult {
