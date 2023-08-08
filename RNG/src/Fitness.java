@@ -17,7 +17,12 @@ public class Fitness {
             ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
         }
         chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
-        return (chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g) / (Config.GWeight + Config.LTLWeight + Config.MWeight);
+        if (Float.isNaN((chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g)
+                / (Config.GWeight + Config.LTLWeight + Config.MWeight)))
+            return 0;
+        else
+            return (chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g)
+                    / (Config.GWeight + Config.LTLWeight + Config.MWeight);
     }
 
     private static float LTL(InterpretorResults[] output, Chromosome chromosome, int gen) {
@@ -66,7 +71,7 @@ public class Fitness {
         chromosomeDBInfo.IllegalOutput = tIllegalOutput;
         chromosomeDBInfo.ExpectedOutput = tExpectedOutput;
         ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
-        return (((float) Config.LTLWeight * result)/output.length);
+        return (((float) Config.LTLWeight * result) / output.length);
     }
 
     private static float M(InterpretorResults[] output) {
@@ -102,7 +107,7 @@ public class Fitness {
                 continue;
             }
         }
-        return (result/output.length) * Config.MWeight;
+        return (result / output.length) * Config.MWeight;
     }
 
     private static boolean MContained(InterpretorResults[] output) {
@@ -152,7 +157,7 @@ public class Fitness {
             result += 1;
         }
 
-        return ((float)result * FitnessConfig.Safety.weight);
+        return ((float) result * FitnessConfig.Safety.weight);
     }
 
     private static float Livelyness(InterpretorResults output) {
@@ -243,7 +248,7 @@ public class Fitness {
             return 0;
 
         float result = FitnessConfig.ExpectedOutput.constantExpected(output);
-        //float result = FitnessConfig.ExpectedOutput.
+        // float result = FitnessConfig.ExpectedOutput.
 
         result = (float) (FitnessConfig.ExpectedOutput.weight * result);
         return result;

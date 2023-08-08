@@ -20,7 +20,7 @@ public class FitnessConfig {
     static {
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
-        int tempActive = 0;
+        float tempActive = 0;
         try {
             obj = ((JSONObject) jsonParser.parse(new FileReader("Config.json"))).get("FitnessFunction");
         } catch (Exception e) {
