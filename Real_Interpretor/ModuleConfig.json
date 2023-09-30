@@ -1,0 +1,11 @@
+{
+    "modules" : [
+        {
+            "moduleName" : "BasicTask",
+            "enabled" : false,
+            "relativePath" : "/",
+            "executionCommand" : "",
+            "numberOfCLArguments" : 1
+        }
+    ]
+}
