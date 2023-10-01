@@ -2,10 +2,10 @@
     "modules" : [
         {
             "moduleName" : "BasicTask",
-            "enabled" : false,
+            "enabled" : true,
             "relativePath" : "/",
             "executionCommand" : "",
-            "numberOfCLArguments" : 1
+            "numberOfCLArguments" : 0
         }
     ]
 }

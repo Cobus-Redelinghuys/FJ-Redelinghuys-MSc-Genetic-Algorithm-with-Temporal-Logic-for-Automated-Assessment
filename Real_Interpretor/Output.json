@@ -1,1 +1,14 @@
-{"results":[{"instructorExitCode":0,"studentExitCode":0,"studentErrOut":"","instructorStdOut":"5\r\n","instructorExeTime":172,"studentStdOut":"5\r\n","studentExeTime":102,"instructorErrOut":""},{"instructorExitCode":0,"studentExitCode":1,"studentErrOut":"Exception in thread \"main\" java.lang.NumberFormatException: For input string: \"13\"\r\n\tat java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)\r\n\tat java.lang.Long.parseLong(Long.java:589)\r\n\tat Main.main(Main.java:4)\r\n","instructorStdOut":"Invalid value\r\n","instructorExeTime":104,"studentStdOut":"","studentExeTime":96,"instructorErrOut":""},{"instructorExitCode":0,"studentExitCode":1,"studentErrOut":"Infinite loop","instructorStdOut":"Finished Loop\r\n","instructorExeTime":206,"studentStdOut":"","studentExeTime":5002,"instructorErrOut":""},{"instructorExitCode":0,"studentExitCode":0,"studentErrOut":"","instructorStdOut":"","instructorExeTime":125,"studentStdOut":"","studentExeTime":108,"instructorErrOut":""},{"instructorExitCode":0,"studentExitCode":0,"studentErrOut":"","instructorStdOut":"truefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalse\r\n","instructorExeTime":221,"studentStdOut":"truefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalsetruefalse\r\n","studentExeTime":187,"instructorErrOut":""},{"instructorExitCode":0,"studentExitCode":0,"studentErrOut":"Exception in thread \"Thread-0\" Exception in thread \"Thread-1\" java.lang.AssertionError: RaceCondition occurred\r\n\tat Number.run(Module9.java:36)\r\njava.lang.AssertionError: RaceCondition occurred\r\n\tat Number.run(Module9.java:36)\r\n","instructorStdOut":"","instructorExeTime":109,"studentStdOut":"","studentExeTime":90,"instructorErrOut":""}]}
+{
+    "results": [
+        {
+            "instructorExitCode": 0,
+            "studentExitCode": 0,
+            "studentErrOut": "",
+            "instructorStdOut": "make -C .\/Instructor_Solution\/ || true\nmake[1]: Entering directory '\/mnt\/c\/2023\/Masters\/Code\/FJ-Redelinghuys-MSc-Genetic-Algorithm-with-Temporal-Logic-for-Automated-Assessment\/Real_Interpretor\/Instructor_Solution'\nrm *.o main -f\ng++ -g -std=c++98 *.cpp -o main\n.\/main\nHello World\nmake[1]: Leaving directory '\/mnt\/c\/2023\/Masters\/Code\/FJ-Redelinghuys-MSc-Genetic-Algorithm-with-Temporal-Logic-for-Automated-Assessment\/Real_Interpretor\/Instructor_Solution'\n",
+            "instructorExeTime": 633,
+            "studentStdOut": "make -C .\/Student_Solution\/ || true\nmake[1]: Entering directory '\/mnt\/c\/2023\/Masters\/Code\/FJ-Redelinghuys-MSc-Genetic-Algorithm-with-Temporal-Logic-for-Automated-Assessment\/Real_Interpretor\/Student_Solution'\nrm *.o main -f\ng++ -g -std=c++98 *.cpp -o main\n.\/main\nHello World\nmake[1]: Leaving directory '\/mnt\/c\/2023\/Masters\/Code\/FJ-Redelinghuys-MSc-Genetic-Algorithm-with-Temporal-Logic-for-Automated-Assessment\/Real_Interpretor\/Student_Solution'\n",
+            "studentExeTime": 632,
+            "instructorErrOut": ""
+        }
+    ]
+}

@@ -1,4 +1,5 @@
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Duration;
@@ -17,7 +18,7 @@ public class ModulesConfig {
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
         try {
-            obj = jsonParser.parse(new FileReader(path+"ModuleConfig.json"));
+            obj = jsonParser.parse(new FileReader(path + "ModuleConfig.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,16 +45,14 @@ public class ModulesConfig {
         HashMap<Integer, JSONObject> tempResults = new HashMap<>();
         for (int i = 0; i < moduleRunners.length; i++) {
             moduleRunners[i] = new ModuleRunner(moduleConfigs[i],
-                    input.moduleInputs.get(moduleConfigs[i].moduleName),
+                    MainCreator.createMain(input.moduleInputs),
                     path);
-            if (moduleRunners[i].moduleConfig.enabled) {
-                moduleRunners[i].run();
-            }
+            moduleRunners[i].run();
         }
         try {
             for (int i = 0; i < moduleRunners.length; i++) {
                 if (moduleRunners[i].moduleConfig.enabled) {
-                    //moduleRunners[i].join();
+                    // moduleRunners[i].join();
                     tempResults.put(i, moduleRunners[i].getResults());
                 }
             }
@@ -61,8 +60,8 @@ public class ModulesConfig {
             e.printStackTrace();
         }
 
-        for(int i=0; i < moduleRunners.length; i++){
-            if(tempResults.containsKey(i)){
+        for (int i = 0; i < moduleRunners.length; i++) {
+            if (tempResults.containsKey(i)) {
                 result.add(tempResults.get(i));
             }
         }
@@ -133,21 +132,26 @@ class ModuleConfig {
     @SuppressWarnings("unchecked")
     public JSONObject executeModule(String input, String path) {
         String[] result = new String[2];
-        String args = "";
         LocalTime start = null;
         LocalTime end;
         int exitValue = 0;
-
-        if (moduleName.equals("module5")) {
-            input = Long.toBinaryString(Long.parseLong(input));
+        boolean instructor = path.toLowerCase().contains("instructor");
+        try {
+            FileWriter myWriter = new FileWriter(path + "/main.cpp");
+            myWriter.write(input);
+            myWriter.close();
+        } catch (Exception e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
-        args += input + " ";
 
         try {
             start = LocalTime.now();
             Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec(executionCommand + " " + path + executablePath + " " + args + " " + relativePath);
-            System.out.println(executionCommand + " " + path + executablePath + " " + args + " " + relativePath);
+            String command = "make " + (instructor ? "instructor" : "student");
+            System.out.println(command);
+            Process process = runtime
+                    .exec(command);
             InputStream inputStream = process.getInputStream();
             InputStreamReader isr = new InputStreamReader(inputStream);
             InputStream errorStream = process.getErrorStream();
@@ -186,21 +190,21 @@ class ModuleConfig {
 }
 
 class Input {
-    public final HashMap<String, String> moduleInputs;
+    public final ArrayList<Long> moduleInputs;
 
     public Input(String path) throws InputException {
-        HashMap<String, String> map = new HashMap<>();
+        ArrayList<Long> map = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
         try {
-            obj = jsonParser.parse(new FileReader(path+"Input.json"));
+            obj = jsonParser.parse(new FileReader(path + "Input.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         JSONObject jsonObject = (JSONObject) obj;
         JSONArray inputs = (JSONArray) jsonObject.get("Input");
         for (int i = 0; i < inputs.size(); i++) {
-            map.put("Module" + (i + 1), ((Long) inputs.get(i)).toString());
+            map.add((Long) inputs.get(i));
         }
 
         moduleInputs = map;
@@ -255,7 +259,7 @@ class ModuleRunner {
         this.path = path;
     }
 
-    //@Override
+    // @Override
     public void run() {
         result = moduleConfig.executeModule(input, path);
     }

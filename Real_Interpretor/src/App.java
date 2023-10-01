@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 @SuppressWarnings("unchecked")
 public class App {
     public static void main(String[] args) throws Exception {
-        //args = new String[] { "./" };
+        args = new String[] { "./" };
         ModulesConfig.set(args[0]);
         Input input = null;
         try {
@@ -31,22 +31,18 @@ public class App {
             JSONObject jsonObject = (JSONObject) object;
             instructionMap.put((String) jsonObject.get("moduleName"), jsonObject);
         }
+        String moduleName = "BasicTask";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("studentStdOut", studentMap.get(moduleName).get("stdout"));
+        jsonObject.put("studentErrOut", studentMap.get(moduleName).get("stderr"));
+        jsonObject.put("studentExeTime", studentMap.get(moduleName).get("duration"));
+        jsonObject.put("studentExitCode", studentMap.get(moduleName).get("exitvalue"));
+        jsonObject.put("instructorStdOut", instructionMap.get(moduleName).get("stdout"));
+        jsonObject.put("instructorErrOut", instructionMap.get(moduleName).get("stderr"));
+        jsonObject.put("instructorExeTime", instructionMap.get(moduleName).get("duration"));
+        jsonObject.put("instructorExitCode", instructionMap.get(moduleName).get("exitvalue"));
+        moduleResults.add(jsonObject);
 
-        for (int i = 0; i < 10; i++) {
-            String moduleName = "Module" + i;
-            if (studentMap.containsKey(moduleName)) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("studentStdOut", studentMap.get(moduleName).get("stdout"));
-                jsonObject.put("studentErrOut", studentMap.get(moduleName).get("stderr"));
-                jsonObject.put("studentExeTime", studentMap.get(moduleName).get("duration"));
-                jsonObject.put("studentExitCode", studentMap.get(moduleName).get("exitvalue"));
-                jsonObject.put("instructorStdOut", instructionMap.get(moduleName).get("stdout"));
-                jsonObject.put("instructorErrOut", instructionMap.get(moduleName).get("stderr"));
-                jsonObject.put("instructorExeTime", instructionMap.get(moduleName).get("duration"));
-                jsonObject.put("instructorExitCode", instructionMap.get(moduleName).get("exitvalue"));
-                moduleResults.add(jsonObject);
-            }
-        }
         result.put("results", moduleResults);
 
         System.out.println("Finished creating json object");
