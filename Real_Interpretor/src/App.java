@@ -1,5 +1,8 @@
 import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -53,6 +56,24 @@ public class App {
             e.printStackTrace();
         }
 
+        try (FileWriter file = new FileWriter(args[0] + "/CreatedMains/main_" + LocalDateTime.now().toString() + ".cpp");) {
+            file.write(MainCreator.content);
+            file.write("/*Instructor output:\n");
+            for(String line: ((String)instructionMap.get(moduleName).get("stdout")).split("\n")){
+                if(!line.contains("make"))
+                    file.write(line + "\n");
+            }
+            file.write("\n");
+            file.write("Student output:\n");
+            for(String line: ((String)studentMap.get(moduleName).get("stdout")).split("\n")){
+                if(!line.contains("make"))
+                    file.write(line + "\n");
+            }
+            file.write("*/\n");
+            file.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static JSONArray instructor(Input input, String path) {

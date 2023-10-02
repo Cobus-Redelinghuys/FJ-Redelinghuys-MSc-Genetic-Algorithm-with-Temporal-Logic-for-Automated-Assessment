@@ -181,7 +181,13 @@ class ModuleConfig {
         }
         end = LocalTime.now();
         JSONObject obj = new JSONObject();
-        obj.put("stdout", result[0]);
+        String processedOutput = "";
+        for(String line: result[0].split("\n")){
+            if(!line.contains("make")){
+                processedOutput += line + "\n";
+            }
+        }
+        obj.put("stdout", processedOutput);
         obj.put("stderr", result[1]);
         obj.put("duration", Duration.between(start, end).toMillis());
         obj.put("exitvalue", exitValue);
