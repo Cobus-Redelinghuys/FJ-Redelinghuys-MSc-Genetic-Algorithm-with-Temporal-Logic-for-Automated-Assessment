@@ -57,6 +57,28 @@
             "maxValue": 15,
             "invalidValues": [
             ]
+        },{
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },
+        {
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },
+        {
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },{
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
         }
     ],
     "FitnessFunction": {
@@ -79,12 +101,12 @@
         "ExecutionTime" : {
             "enabled" : true,
             "weight" : 1,
-            "maxTime" : 3000
+            "maxTime" : 1000
         },
         "IllegalOutput": {
-            "enabled" : true,
+            "enabled" : false,
             "weight" : 1,
-            "words" : ["isosceles"]
+            "words" : []
         },
         "ExpectedOutput" : {
             "enabled" : false,
@@ -96,25 +118,25 @@
     "reproductionProp":0.5,
     "crossoverProp":0.5,
     "seed":0,
-    "mutationType":"RandomInversion",
-    "selectionSize":10,
-    "populationSize":20,
+    "mutationType":"BitWiseInversion",
+    "selectionSize":20,
+    "populationSize":50,
     "numGenerations":50,
-    "crossOverType":"UniformedCrossOver",
+    "crossOverType":"OnePointCrossOver",
     "mutationProp":0.5,
     "nCrossOver":5,
-    "tournamentSize":5,
+    "tournamentSize":2,
     "numberOfContestants":5,
     "interpreterPath" : "./Interpreter",
     "interpreterExecutorName" : "Interpreter.jar",
     "interpreterCommand" : "java -jar ",
-    "LTLWeight" : 1.0,
-    "MWeight" : 0.0,
-    "GWeight" : 0.0,
-    "maxCrossOverAttempts" : 100,
-    "maxMutationAttempts" : 100,
+    "LTLWeight" : 0.3,
+    "MWeight" : 0.3,
+    "GWeight" : 0.3,
+    "maxCrossOverAttempts" : 10,
+    "maxMutationAttempts" : 10,
     "nMutation":5,
-    "numberInterpreterInstances" : 5,
+    "numberInterpreterInstances" : 3,
     "truncationSelectionPer" : 0.75,
-    "selectionMethod" : "TruncationSelection"
+    "selectionMethod" : "TournamentSelection"
 }

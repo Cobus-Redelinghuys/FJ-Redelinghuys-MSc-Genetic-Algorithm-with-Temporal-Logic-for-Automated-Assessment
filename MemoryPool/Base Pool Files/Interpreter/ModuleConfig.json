@@ -69,6 +69,35 @@
             "relativePath" : "/Module10/Module10.jar",
             "executionCommand" : "java -jar",
             "numberOfCLArguments" : 1
+        },
+        {
+            "moduleName" : "Module11",
+            "enabled" : true,
+            "relativePath" : "/Module11/Module11.jar",
+            "executionCommand" : "java -jar ",
+            "numberOfCLArguments" : 1
+        }
+        ,
+        {
+            "moduleName" : "Module12",
+            "enabled" : true,
+            "relativePath" : "/Module12/Module12.jar",
+            "executionCommand" : "java -jar ",
+            "numberOfCLArguments" : 1
+        },
+        {
+            "moduleName" : "Module13",
+            "enabled" : true,
+            "relativePath" : "/Module13/Module13",
+            "executionCommand" : "",
+            "numberOfCLArguments" : 1
+        },
+        {
+            "moduleName" : "Module14",
+            "enabled" : true,
+            "relativePath" : "/Module14/Module14",
+            "executionCommand" : "",
+            "numberOfCLArguments" : 1
         }
     ]
 }
