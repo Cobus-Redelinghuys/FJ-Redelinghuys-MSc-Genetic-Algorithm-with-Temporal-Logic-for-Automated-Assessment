@@ -15,12 +15,12 @@ public class FitnessConfig {
     public static final IllegalOutputField IllegalOutput;
     public static final ExpectedOutputField ExpectedOutput;
 
-    public static final float weightsOfActiveProperties;
+    public static final int weightsOfActiveProperties;
 
     static {
         JSONParser jsonParser = new JSONParser();
         Object obj = null;
-        float tempActive = 0;
+        int tempActive = 0;
         try {
             obj = ((JSONObject) jsonParser.parse(new FileReader("Config.json"))).get("FitnessFunction");
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class FitnessConfig {
         } finally {
             Safety = (FitnessConfigField) res;
             if(Safety.enabled){
-                tempActive += Safety.weight;
+                tempActive += 1;
             }
         }
 
@@ -48,7 +48,7 @@ public class FitnessConfig {
         } finally {
             Livelyness = (FitnessConfigField) res;
             if(Livelyness.enabled){
-                tempActive += Livelyness.weight;
+                tempActive += 1;
             }
         }
 
@@ -60,7 +60,7 @@ public class FitnessConfig {
         } finally {
             SegFault = (FitnessConfigField) res;
             if(SegFault.enabled){
-                tempActive += SegFault.weight;
+                tempActive += 1;
             }
         }
 
@@ -72,7 +72,7 @@ public class FitnessConfig {
         } finally {
             Exceptions = (FitnessConfigField) res;
             if(Exceptions.enabled){
-                tempActive += Exceptions.weight;
+                tempActive += 1;
             }
         }
 
@@ -84,7 +84,7 @@ public class FitnessConfig {
         } finally {
             ExecutionTime = (ExecutionTimeField) res;
             if(ExecutionTime.enabled){
-                tempActive += ExecutionTime.weight;
+                tempActive += 1;
             }
         }
 
@@ -96,7 +96,7 @@ public class FitnessConfig {
         } finally {
             IllegalOutput = (IllegalOutputField) res;
             if(IllegalOutput.enabled){
-                tempActive += IllegalOutput.weight;
+                tempActive += 1;
             }
         }
 
@@ -108,7 +108,7 @@ public class FitnessConfig {
         } finally {
             ExpectedOutput = (ExpectedOutputField) res;
             if(ExpectedOutput.enabled){
-                tempActive+= ExpectedOutput.weight;
+                tempActive+= 1;
             }
         }
         weightsOfActiveProperties = tempActive;
@@ -118,12 +118,10 @@ public class FitnessConfig {
 
 class FitnessConfigField {
     public final boolean enabled;
-    public final float weight;
 
     public FitnessConfigField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = Boolean.parseBoolean(jsonObject.get("enabled").toString());
-            weight =  Float.parseFloat(jsonObject.get("weight").toString());
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Malformed safety property");
@@ -132,19 +130,16 @@ class FitnessConfigField {
 
     public FitnessConfigField() {
         enabled = false;
-        weight = Float.NaN;
     }
 }
 
 class IllegalOutputField {
     public final boolean enabled;
-    public final float weight;
     public final String[] words;
 
     public IllegalOutputField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = Boolean.parseBoolean(jsonObject.get("enabled").toString());
-            weight = Float.parseFloat(jsonObject.get("weight").toString());
             JSONArray arr = (JSONArray) jsonObject.get("words");
             String[] res = new String[arr.size()];
             for (int i = 0; i < res.length; i++) {
@@ -159,20 +154,17 @@ class IllegalOutputField {
 
     public IllegalOutputField() {
         enabled = false;
-        weight = Float.NaN;
         words = new String[0];
     }
 }
 
 class ExecutionTimeField {
     public final boolean enabled;
-    public final float weight;
     public final long maxTime;
 
     public ExecutionTimeField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = Boolean.parseBoolean(jsonObject.get("enabled").toString());
-            weight = Float.parseFloat(jsonObject.get("weight").toString());
             maxTime = Long.parseLong(jsonObject.get("maxTime").toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,7 +174,6 @@ class ExecutionTimeField {
 
     public ExecutionTimeField() {
         enabled = false;
-        weight = Float.NaN;
         maxTime = 0;
     }
 
@@ -190,14 +181,12 @@ class ExecutionTimeField {
 
 class ExpectedOutputField {
     public final boolean enabled;
-    public final float weight;
     public final boolean exactMatch;
     public final String splitChar;
 
     public ExpectedOutputField(JSONObject jsonObject) throws RuntimeException {
         try {
             enabled = Boolean.parseBoolean(jsonObject.get("enabled").toString());
-            weight = Float.parseFloat(jsonObject.get("weight").toString());
             exactMatch = Boolean.parseBoolean(jsonObject.get("exactMatch").toString());
             splitChar = jsonObject.get("splittingChar").toString();
 
@@ -209,7 +198,6 @@ class ExpectedOutputField {
 
     public ExpectedOutputField() {
         enabled = false;
-        weight = 0;
         exactMatch = false;
         splitChar = "\n";
     }

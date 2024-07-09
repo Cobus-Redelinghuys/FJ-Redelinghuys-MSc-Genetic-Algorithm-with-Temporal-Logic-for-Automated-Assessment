@@ -84,7 +84,15 @@ public class ChromosomeDatabase {
             }
         }
         addDBInfo(chromosomeDBInfo);
-        return (sum / chromosome.genes.length) * Config.GWeight;
+        float res = (sum / chromosome.genes.length) * Config.GWeight;
+        if(res > Config.GWeight){
+            return Config.GWeight;
+        } else if(res < 0){
+            return 0;
+        } else if(Float.isNaN(res)){
+            return 0;
+        }
+        return res;
     }
 
     static JSONObject dbDump() {

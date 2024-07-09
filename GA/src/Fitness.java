@@ -17,12 +17,15 @@ public class Fitness {
             ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
         }
         chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
-        if (Float.isNaN((chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g)
-                / (Config.GWeight + Config.LTLWeight + Config.MWeight)))
+        float res = chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g;
+        if(res > 1){
+            return 1;
+        } else if(res < 0){
             return 0;
-        else
-            return (chromosomeDBInfo.ltl + chromosomeDBInfo.m + chromosomeDBInfo.g)
-                    / (Config.GWeight + Config.LTLWeight + Config.MWeight);
+        } else if(Float.isNaN(res)){
+            return 0;
+        }
+        return res;
     }
 
     private static float LTL(InterpretorResults[] output, Chromosome chromosome, int gen) {
@@ -71,7 +74,15 @@ public class Fitness {
         chromosomeDBInfo.IllegalOutput = tIllegalOutput;
         chromosomeDBInfo.ExpectedOutput = tExpectedOutput;
         ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
-        return (((float) Config.LTLWeight * result) / output.length);
+        float finalRes = (((float) Config.LTLWeight * result) / output.length);
+        if(finalRes > Config.LTLWeight){
+            finalRes = Config.LTLWeight;
+        } else if (finalRes < 0) {
+            finalRes = 0;
+        } else if(Float.isNaN(finalRes)){
+            finalRes = 0;
+        }
+        return finalRes;
     }
 
     private static float M(InterpretorResults[] output) {
@@ -107,7 +118,15 @@ public class Fitness {
                 continue;
             }
         }
-        return (result / output.length) * Config.MWeight;
+        float finalRes = (result / output.length) * Config.MWeight;
+        if(finalRes > Config.MWeight){
+            finalRes = Config.MWeight;
+        } else if (finalRes < 0) {
+            finalRes = 0;
+        } else if(Float.isNaN(finalRes)){
+            finalRes = 0;
+        }
+        return finalRes;
     }
 
     private static boolean MContained(InterpretorResults[] output) {
@@ -157,7 +176,7 @@ public class Fitness {
             result += 1;
         }
 
-        return ((float) result * FitnessConfig.Safety.weight);
+        return ((float) result);
     }
 
     private static float Livelyness(InterpretorResults output) {
@@ -169,7 +188,7 @@ public class Fitness {
             result += 1;
         }
 
-        result = (float) (FitnessConfig.Livelyness.weight * result);
+        result = (float) (result);
         return result;
     }
 
@@ -186,7 +205,7 @@ public class Fitness {
                 || output.exeTime == 139) {
             result += 1;
         }
-        result = (float) (FitnessConfig.SegFault.weight * result);
+        result = (float) (result);
         return result;
     }
 
@@ -207,7 +226,7 @@ public class Fitness {
             result += 1;
         }
 
-        result = (float) (FitnessConfig.Exceptions.weight * result);
+        result = (float) (result);
         return result;
     }
 
@@ -220,7 +239,7 @@ public class Fitness {
         if (output.exeTime > FitnessConfig.ExecutionTime.maxTime) {
             result += 1;
         }
-        result = (float) FitnessConfig.ExecutionTime.weight * result;
+        result = (float)result;
         return result;
     }
 
@@ -238,7 +257,7 @@ public class Fitness {
                 result += 1;
             }
         }
-        result = (float) (FitnessConfig.IllegalOutput.weight * result
+        result = (float) (result
                 / (FitnessConfig.IllegalOutput.words.length));
         return result;
     }
@@ -250,7 +269,7 @@ public class Fitness {
         float result = FitnessConfig.ExpectedOutput.constantExpected(output);
         // float result = FitnessConfig.ExpectedOutput.
 
-        result = (float) (FitnessConfig.ExpectedOutput.weight * result);
+        result = (float) (result);
         return result;
     }
 }

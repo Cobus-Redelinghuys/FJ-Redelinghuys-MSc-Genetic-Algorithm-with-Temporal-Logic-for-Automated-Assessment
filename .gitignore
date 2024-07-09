@@ -1,1 +1,9 @@
 *.class
+GA/bin/ChromosomeDatabase.class
+GA/bin/ChromosomeDBInfo.class
+GA/bin/ExecutionTimeField.class
+GA/bin/ExpectedOutputField.class
+GA/bin/Fitness.class
+GA/bin/FitnessConfig.class
+GA/bin/FitnessConfigField.class
+GA/bin/IllegalOutputField.class
