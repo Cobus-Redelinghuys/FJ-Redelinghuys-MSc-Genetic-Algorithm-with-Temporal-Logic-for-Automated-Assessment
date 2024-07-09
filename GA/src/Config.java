@@ -31,7 +31,7 @@ public class Config {
     public static final CrossOver crossOver;
     public static final Mutation mutation;
 
-    public static final Interpretor interpretor;
+    public static final Interpreter interpreter;
 
     public static final Selection selectionMethod;
     
@@ -75,10 +75,10 @@ public class Config {
         mutation = Mutation.getMutation(mutationType);
         nMutation = ((Long) jsonObject.get("nMutation")).intValue();
         int numberInterpreterInstances = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
-        String interpretorExecutorName = (String) jsonObject.get("interpretorExecutorName");
+        String interpreterExecutorName = (String) jsonObject.get("interpreterExecutorName");
 
-        interpretor = new Interpretor(interpreterPath, interpreterCommand,
-                numberInterpreterInstances, interpretorExecutorName);
+        interpreter = new Interpreter(interpreterPath, interpreterCommand,
+                numberInterpreterInstances, interpreterExecutorName);
 
         numContestants = ((Long) jsonObject.get("numberInterpreterInstances")).intValue();
         truncationSelectionPer = ((Double) jsonObject.get("truncationSelectionPer")).floatValue();

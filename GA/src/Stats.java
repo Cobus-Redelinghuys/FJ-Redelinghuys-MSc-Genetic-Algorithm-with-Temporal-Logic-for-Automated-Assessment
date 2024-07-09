@@ -128,9 +128,9 @@ public class Stats {
 class StatsNode{
     final int generation;
     final HashMap<Chromosome, Float> fitnessSet;
-    final HashMap<Chromosome, InterpretorResults[]> interpretorResults;
+    final HashMap<Chromosome, InterpreterResults[]> interpretorResults;
 
-    StatsNode(int generation, HashMap<Chromosome, Float> fitnessSet, HashMap<Chromosome, InterpretorResults[]> interpretorResults){
+    StatsNode(int generation, HashMap<Chromosome, Float> fitnessSet, HashMap<Chromosome, InterpreterResults[]> interpretorResults){
         this.generation = generation;
         this.fitnessSet = fitnessSet;
         this.interpretorResults = interpretorResults;
@@ -152,7 +152,7 @@ class StatsNode{
             jsonObject.put("fitness", fitnessSet.get(chromosome));
             jsonObject.put("fitnessBreakdown", ChromosomeDatabase.getDB(chromosome, generation).toJSON());
             JSONArray irResults = new JSONArray();
-            for (InterpretorResults irResult : interpretorResults.get(chromosome)) {
+            for (InterpreterResults irResult : interpretorResults.get(chromosome)) {
                 irResults.add(irResult.toJSON());
             }
             jsonObject.put("InterpretorResults", irResults);

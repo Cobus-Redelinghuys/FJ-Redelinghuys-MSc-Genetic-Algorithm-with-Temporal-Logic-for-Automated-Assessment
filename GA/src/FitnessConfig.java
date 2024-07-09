@@ -1,6 +1,4 @@
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -202,7 +200,7 @@ class ExpectedOutputField {
         splitChar = "\n";
     }
 
-    public float constantExpected(InterpretorResults output) {
+    public float constantExpected(InterpreterResults output) {
         /*int matched = 0;
         int possibles = 0;
         int penalty = 0;

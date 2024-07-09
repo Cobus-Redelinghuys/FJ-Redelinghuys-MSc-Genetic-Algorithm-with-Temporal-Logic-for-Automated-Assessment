@@ -1,5 +1,5 @@
 public class Fitness {
-    public static float determineFitness(InterpretorResults[] output, int gen, Chromosome chromosome) {
+    public static float determineFitness(InterpreterResults[] output, int gen, Chromosome chromosome) {
         ChromosomeDBInfo chromosomeDBInfo = new ChromosomeDBInfo(chromosome, gen);
         ChromosomeDatabase.addDBInfo(chromosomeDBInfo);
         float ltl = LTL(output, chromosome, gen);
@@ -28,7 +28,7 @@ public class Fitness {
         return res;
     }
 
-    private static float LTL(InterpretorResults[] output, Chromosome chromosome, int gen) {
+    private static float LTL(InterpreterResults[] output, Chromosome chromosome, int gen) {
         float result = 0;
         ChromosomeDBInfo chromosomeDBInfo = ChromosomeDatabase.get(chromosome, gen);
 
@@ -40,21 +40,21 @@ public class Fitness {
         float tIllegalOutput = 0;
         float tExpectedOutput = 0;
 
-        for (InterpretorResults interpretorResults : output) {
+        for (InterpreterResults interpreterResults : output) {
             float res = 0;
-            float safety = Safety(interpretorResults);
+            float safety = Safety(interpreterResults);
             res += safety;
-            float livelyness = Livelyness(interpretorResults);
+            float livelyness = Livelyness(interpreterResults);
             res += livelyness;
-            float segFault = SegFault(interpretorResults);
+            float segFault = SegFault(interpreterResults);
             res += livelyness;
-            float exceptions = Exception(interpretorResults);
+            float exceptions = Exception(interpreterResults);
             res += exceptions;
-            float executionTime = ExecutionTime(interpretorResults);
+            float executionTime = ExecutionTime(interpreterResults);
             res += executionTime;
-            float illegalOutput = IllegalOutput(interpretorResults);
+            float illegalOutput = IllegalOutput(interpreterResults);
             res += illegalOutput;
-            float expectedOutput = ExpectedOutput(interpretorResults);
+            float expectedOutput = ExpectedOutput(interpreterResults);
             res += expectedOutput;
             result += res / FitnessConfig.weightsOfActiveProperties;
             tSafety += safety;
@@ -85,35 +85,35 @@ public class Fitness {
         return finalRes;
     }
 
-    private static float M(InterpretorResults[] output) {
+    private static float M(InterpreterResults[] output) {
         float result = 0;
 
-        for (InterpretorResults interpretorResults : output) {
-            if (Safety(interpretorResults) > 0) {
+        for (InterpreterResults interpreterResults : output) {
+            if (Safety(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (Livelyness(interpretorResults) > 0) {
+            if (Livelyness(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (SegFault(interpretorResults) > 0) {
+            if (SegFault(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (Exception(interpretorResults) > 0) {
+            if (Exception(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (ExecutionTime(interpretorResults) > 0) {
+            if (ExecutionTime(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (IllegalOutput(interpretorResults) > 0) {
+            if (IllegalOutput(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (ExpectedOutput(interpretorResults) > 0) {
+            if (ExpectedOutput(interpreterResults) > 0) {
                 result++;
                 continue;
             }
@@ -129,35 +129,35 @@ public class Fitness {
         return finalRes;
     }
 
-    private static boolean MContained(InterpretorResults[] output) {
+    private static boolean MContained(InterpreterResults[] output) {
         float result = 0;
 
-        for (InterpretorResults interpretorResults : output) {
-            if (Safety(interpretorResults) > 0) {
+        for (InterpreterResults interpreterResults : output) {
+            if (Safety(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (Livelyness(interpretorResults) > 0) {
+            if (Livelyness(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (SegFault(interpretorResults) > 0) {
+            if (SegFault(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (Exception(interpretorResults) > 0) {
+            if (Exception(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (ExecutionTime(interpretorResults) > 0) {
+            if (ExecutionTime(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (IllegalOutput(interpretorResults) > 0) {
+            if (IllegalOutput(interpreterResults) > 0) {
                 result++;
                 continue;
             }
-            if (ExpectedOutput(interpretorResults) > 0) {
+            if (ExpectedOutput(interpreterResults) > 0) {
                 result++;
                 continue;
             }
@@ -165,7 +165,7 @@ public class Fitness {
         return result > 0;
     }
 
-    private static float Safety(InterpretorResults output) {
+    private static float Safety(InterpreterResults output) {
         if (!FitnessConfig.Safety.enabled) {
             return 0;
         }
@@ -179,7 +179,7 @@ public class Fitness {
         return ((float) result);
     }
 
-    private static float Livelyness(InterpretorResults output) {
+    private static float Livelyness(InterpreterResults output) {
         if (!FitnessConfig.Livelyness.enabled)
             return 0;
 
@@ -192,9 +192,9 @@ public class Fitness {
         return result;
     }
 
-    private static float SegFault(InterpretorResults output) {
-        if (FitnessConfig.Safety.enabled)
-            return 0;
+    private static float SegFault(InterpreterResults output) {
+        /*if (FitnessConfig.Safety.enabled)
+            return 0;*/
 
         if (!FitnessConfig.SegFault.enabled)
             return 0;
@@ -209,9 +209,9 @@ public class Fitness {
         return result;
     }
 
-    private static float Exception(InterpretorResults output) {
-        if (FitnessConfig.Safety.enabled)
-            return 0;
+    private static float Exception(InterpreterResults output) {
+        /*if (FitnessConfig.Safety.enabled)
+            return 0;*/
 
         if (!FitnessConfig.SegFault.enabled)
             return 0;
@@ -230,7 +230,7 @@ public class Fitness {
         return result;
     }
 
-    private static float ExecutionTime(InterpretorResults output) {
+    private static float ExecutionTime(InterpreterResults output) {
         if (!FitnessConfig.ExecutionTime.enabled)
             return 0;
 
@@ -243,7 +243,7 @@ public class Fitness {
         return result;
     }
 
-    private static float IllegalOutput(InterpretorResults output) {
+    private static float IllegalOutput(InterpreterResults output) {
         if (!FitnessConfig.IllegalOutput.enabled)
             return 0;
 
@@ -262,7 +262,7 @@ public class Fitness {
         return result;
     }
 
-    private static float ExpectedOutput(InterpretorResults output) {
+    private static float ExpectedOutput(InterpreterResults output) {
         if (!FitnessConfig.ExpectedOutput.enabled)
             return 0;
 

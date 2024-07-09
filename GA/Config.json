@@ -17,6 +17,46 @@
             "maxValue": 15,
             "invalidValues": [
             ]
+        },
+        {
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },
+        {
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },
+        {
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },{
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },
+        {
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },
+        {
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
+        },{
+            "minValue": -1,
+            "maxValue": 15,
+            "invalidValues": [
+            ]
         }
     ],
     "FitnessFunction": {
@@ -65,12 +105,12 @@
     "nCrossOver":5,
     "tournamentSize":5,
     "numberOfContestants":5,
-    "interpreterPath" : "./Interpretor",
-    "interpretorExecutorName" : "Interpretor.jar",
+    "interpreterPath" : "./Interpreter",
+    "interpreterExecutorName" : "Interpreter.jar",
     "interpreterCommand" : "java -jar ",
-    "LTLWeight" : 0.4,
-    "MWeight" : 0.3,
-    "GWeight" : 0.3,
+    "LTLWeight" : 1.0,
+    "MWeight" : 0.0,
+    "GWeight" : 0.0,
     "maxCrossOverAttempts" : 100,
     "maxMutationAttempts" : 100,
     "nMutation":5,

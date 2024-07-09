@@ -75,7 +75,7 @@ public class ChromosomeDatabase {
         for (int i = 0; i < db.length; i++) {
             if (db[i].containsKey(chromosome.genes[i])) {
                 int size = db[i].get(chromosome.genes[i]).size();
-                int tGen = gen+1;
+                //int tGen = gen+1;
                 sum += (float) size / (float) numChromosomesEvaluated();
                 chromosomeDBInfo.gSubValues[i] = (float) size / (float) numChromosomesEvaluated();
             } else {
@@ -103,7 +103,7 @@ public class ChromosomeDatabase {
                 JSONObject jsonObject = new JSONObject();
                 JSONObject dbInfo = chromosomeDBInfo.get(gen).get(chromosome).toJSON();
                 jsonObject.put("FitnessInfo", dbInfo);
-                jsonObject.put("ChromosomInfo", chromosome.toJSON());
+                jsonObject.put("ChromosomeInfo", chromosome.toJSON());
                 genInfo.add(jsonObject);
             }
             result.put(gen, genInfo);

@@ -3,7 +3,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 abstract public class Selection {
     abstract SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation);
@@ -48,7 +47,7 @@ class RouletteSelection extends Selection {
     @Override
     SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
         Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
-        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
+        HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
             float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
@@ -99,7 +98,7 @@ class StochasticUniversalSampling extends Selection {
     @Override
     SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
         Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
-        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
+        HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
             float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
@@ -207,7 +206,7 @@ class LinearRankSelection extends Selection {
     @Override
     SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
         Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
-        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
+        HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         HashMap<Float, ArrayList<Chromosome>> revFitness = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
@@ -268,7 +267,7 @@ class ExponentialRankSelection extends Selection {
     @Override
     SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
         Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
-        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
+        HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         HashMap<Float, ArrayList<Chromosome>> revFitness = new HashMap<>();
         for (Chromosome chromosome : chromosomeArray) {
@@ -334,7 +333,7 @@ class TournamentSelection extends Selection {
         HashSet<Chromosome> winners = new HashSet<>();
         HashSet<Chromosome> looosers = new HashSet<>();
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
-        HashMap<Chromosome, InterpretorResults[]> interpertorResults = new HashMap<>();
+        HashMap<Chromosome, InterpreterResults[]> interpertorResults = new HashMap<>();
 
         Chromosome[] popArr = population.toArray(new Chromosome[0]);
         while (winners.size() <= Config.tournamentSize) {
@@ -342,7 +341,7 @@ class TournamentSelection extends Selection {
             for (int i = 0; i < candidates.length; i++) {
                 candidates[i] = popArr[Config.random.nextInt(popArr.length)];
             }
-            HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(candidates);
+            HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(candidates);
             interpertorResults.putAll(results);
             HashMap<Chromosome, Float> localFitness = new HashMap<>();
             for (Chromosome chromosome : results.keySet()) {
@@ -359,7 +358,7 @@ class TournamentSelection extends Selection {
             for (int i = 0; i < candidates.length; i++) {
                 candidates[i] = popArr[Config.random.nextInt(popArr.length)];
             }
-            HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(candidates);
+            HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(candidates);
             interpertorResults.putAll(results);
             HashMap<Chromosome, Float> localFitness = new HashMap<>();
             for (Chromosome chromosome : results.keySet()) {
@@ -406,7 +405,7 @@ class TruncationSelection extends Selection {
     @Override
     SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
         Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
-        HashMap<Chromosome, InterpretorResults[]> results = Config.interpretor.run(chromosomeArray);
+        HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
         float bestFitness = Float.NEGATIVE_INFINITY;
         for (Chromosome chromosome : chromosomeArray) {
