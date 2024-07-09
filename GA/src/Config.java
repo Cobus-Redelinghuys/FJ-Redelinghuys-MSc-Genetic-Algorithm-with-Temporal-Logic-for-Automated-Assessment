@@ -84,6 +84,10 @@ public class Config {
         truncationSelectionPer = ((Double) jsonObject.get("truncationSelectionPer")).floatValue();
         String selectionName = (String)jsonObject.get("selectionMethod");
         selectionMethod = Selection.getSelection(selectionName);
+
+        if(LTLWeight + MWeight + GWeight != 1.0){
+            throw new RuntimeException("Weights do not correctly count up: " + LTLWeight + ", " + MWeight + ", " + GWeight);
+        }
     }
 }
 
