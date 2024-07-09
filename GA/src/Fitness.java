@@ -221,8 +221,8 @@ public class Fitness {
         if (output.stdOut.toLowerCase().contains("exception")
                 || output.stdOut.toLowerCase().contains("exceptions")) {
             result += 1;
-        } else if (output.stdOut.toLowerCase().contains("exception")
-                || output.stdOut.toLowerCase().contains("exceptions")) {
+        } else if (output.errOut.toLowerCase().contains("exception")
+                || output.errOut.toLowerCase().contains("exceptions")) {
             result += 1;
         }
 
