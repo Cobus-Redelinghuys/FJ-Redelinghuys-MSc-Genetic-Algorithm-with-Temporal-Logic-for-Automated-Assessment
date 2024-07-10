@@ -23,28 +23,28 @@
         },
         {
             "moduleName" : "Module4",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module4/Module4.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1
         },
         {
             "moduleName" : "Module5",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module5/Module5.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1
         },
         {
             "moduleName" : "Module6",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module6/Module6.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1
         },
         {
             "moduleName" : "Module7",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module7/Module7.jar",
             "executionCommand" : "java -jar",
             "numberOfCLArguments" : 1
@@ -58,14 +58,14 @@
         },
         {
             "moduleName" : "Module9",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module9/Module9.jar",
             "executionCommand" : "java -ea -jar",
             "numberOfCLArguments" : 1
         },
         {
             "moduleName" : "Module10",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module10/Module10.jar",
             "executionCommand" : "java -jar",
             "numberOfCLArguments" : 1
@@ -80,14 +80,14 @@
         ,
         {
             "moduleName" : "Module12",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module12/Module12.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1
         },
         {
             "moduleName" : "Module13",
-            "enabled" : true,
+            "enabled" : false,
             "relativePath" : "/Module13/Module13",
             "executionCommand" : "",
             "numberOfCLArguments" : 1
