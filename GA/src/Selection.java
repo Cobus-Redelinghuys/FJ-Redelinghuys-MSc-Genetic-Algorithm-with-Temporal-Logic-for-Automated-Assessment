@@ -44,48 +44,98 @@ class SelectionResult {
 }
 
 class RouletteSelection extends Selection {
+    class Pair{
+        Chromosome chromosome;
+        Float fitness;
+
+        Pair(Chromosome c, Float f){
+            chromosome = c;
+            fitness = f;
+        }
+
+        Pair(Pair p){
+            chromosome = p.chromosome;
+            fitness = p.fitness;
+        }
+    }
+
     @Override
     SelectionResult selectChromosomes(HashSet<Chromosome> population, int generation) {
         Chromosome[] chromosomeArray = population.toArray(new Chromosome[0]);
         HashMap<Chromosome, InterpreterResults[]> results = Config.interpreter.run(chromosomeArray);
         HashMap<Chromosome, Float> fitnesses = new HashMap<>();
+        ArrayList<Float> sortedFitnesses = new ArrayList<>();
+        float sum = 0;
         for (Chromosome chromosome : chromosomeArray) {
             float fitness = Fitness.determineFitness(results.get(chromosome), generation, chromosome);
             chromosome.lastRecordedFitness = fitness;
             fitnesses.put(chromosome, fitness);
+            sortedFitnesses.add(fitness);
+            sum += fitness;
         }
 
-        float sum = 0;
-        for (Float fal : fitnesses.values()) {
-            sum += fal;
-        }
-        HashMap<Chromosome, Float> probabilities = new HashMap<>();
-        for (Chromosome chromosome : chromosomeArray) {
-            float fit = fitnesses.get(chromosome);
-            if (sum == 0) {
-                probabilities.put(chromosome, 0.0f);
-            } else {
-                probabilities.put(chromosome, fit / sum);
+        ArrayList<Pair> sortedFitnessList = new ArrayList<>();
+        Collections.sort(sortedFitnesses, Collections.reverseOrder());
+        HashSet<Chromosome> contained = new HashSet<>();
+        for (Float fitness : sortedFitnesses) {
+            for (Chromosome chrom : fitnesses.keySet()) {
+                if(fitness.equals(fitnesses.get(chrom)) && !contained.contains(chrom)){
+                    sortedFitnessList.add(new Pair(chrom, fitness));
+                    contained.add(chrom);
+                }
             }
+        }
 
+        ArrayList<Pair> probabilities = new ArrayList<>();
+        for (Pair p : sortedFitnessList) {
+            float fit = p.fitness;
+            if (sum == 0) {
+                probabilities.add(new Pair(p.chromosome, 0.0f));
+            } else {
+                probabilities.add(new Pair(p.chromosome, fit / sum));
+            }
+        }
+
+        ArrayList<Pair> cumulativeProbability = new ArrayList<>();
+        float fitSum = 0;
+        for (Pair p : probabilities) {
+            if (sum == 0) {
+                cumulativeProbability.add(p);
+            } else {
+                fitSum += p.fitness;
+                cumulativeProbability.add(new Pair(p.chromosome, fitSum));
+            }
         }
 
         HashSet<Chromosome> winnersSet = new HashSet<>();
         HashSet<Chromosome> loosersSet = new HashSet<>();
         while (winnersSet.size() <= Config.tournamentSize) {
-            int pos = Config.random.nextInt(probabilities.size());
+            /*int pos = Config.random.nextInt(probabilities.size());
             Chromosome candidate = probabilities.keySet().toArray(new Chromosome[0])[pos];
             if (Config.random.nextFloat() <= 1 - probabilities.get(candidate)) {
                 winnersSet.add(candidate);
+            }*/
+            float randomValue = 1-Config.random.nextFloat();
+            for(int i=1; i < cumulativeProbability.size(); i++){
+                if(randomValue < cumulativeProbability.get(i).fitness){
+                    winnersSet.add(cumulativeProbability.get(i-1).chromosome);
+                    break;
+                    //cumulativeProbability.remove(i-1);
+                }
             }
         }
 
+        ArrayList<Pair> revOrder = new ArrayList<>(sortedFitnessList);
+        Collections.reverse(revOrder);
         while (loosersSet.size() <= Config.tournamentSize) {
-            int pos = Config.random.nextInt(probabilities.size());
-            Chromosome candidate = probabilities.keySet().toArray(new Chromosome[0])[pos];
-            if (Config.random.nextFloat() <= probabilities.get(candidate)) {
-                loosersSet.add(candidate);
+            if(revOrder.isEmpty()){
+                break;
             }
+            Chromosome chrom = revOrder.get(0).chromosome;
+            if(!winnersSet.contains(chrom)){
+                loosersSet.add(chrom);
+            }
+            revOrder.remove(0);
         }
 
         StatsNode sn = new StatsNode(generation, fitnesses, results);
