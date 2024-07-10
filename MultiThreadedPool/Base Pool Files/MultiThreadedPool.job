@@ -1,8 +1,8 @@
 #!/bin/bash
-#PBS -l select=1:ncpus=10:mpiprocs=4:mem=50gb
+#PBS -l select=1:ncpus=10:mpiprocs=4:mem=20gb
 #PBS -P CSCI1166
-#PBS -q seriallong
-#PBS -l walltime=95:00:00
+#PBS -q serial
+#PBS -l walltime=48:00:00
 #PBS -o /mnt/lustre/users/fredelinghuys/Package2/Package2.out
 #PBS -e /mnt/lustre/users/fredelinghuys/Package2/Package2.err
 #PBS -m abe
@@ -18,5 +18,6 @@ cat $PBS_NODEFILE
 module load chpc/python/3.7.0
 source visualizerenv/bin/activate
 module load chpc/java/17.0.2
+python3 multiplier.py
 make
-tar -cvf Package2.tar ./
+#tar -cvf Package2.tar ./

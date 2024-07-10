@@ -30,7 +30,7 @@
         },
         {
             "moduleName" : "Module5",
-            "enabled" : false,
+            "enabled" : true,
             "relativePath" : "/Module5/Module5.jar",
             "executionCommand" : "java -jar ",
             "numberOfCLArguments" : 1

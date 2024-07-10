@@ -254,7 +254,7 @@ def copyToFile(param, altValue, baseFolder):
 
     with open(destDir + "makefile", "w") as file:
         file.write("main:\n")
-        file.write("\tjava -jar GATLAM.jar >> log.txt")
+        file.write("\tjava -jar GA.jar >> log.txt")
 
     return destDir
 
@@ -335,3 +335,10 @@ for EXPType in experimentValues.keys():
 
                         with open("makefile", "a") as file:
                             file.write("\tmake -C " + destDir + " || true \n")
+    
+    destDir = copyToFile("default","",current_datetime_str)
+    with open(destDir+filePaths, "w") as file:
+            file.write(json.dumps(defaultValues.copy(), indent=4))
+            
+    with open("makefile", "a") as file:
+        file.write("\tmake -C " + destDir + " || true \n")
