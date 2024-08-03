@@ -1,0 +1,7 @@
+Hyperparameter,InfinityPool,LogicErrorPool,MemoryPool,MultiThreadedPool
+ExponentialRankSelection,0.69504,0.7246,0.6998800000000001,0.71424
+LinearRankSelection,0.80824,0.79132,0.81684,0.81824
+RouletteSelection,0.65396,0.63924,0.64352,0.64212
+StochasticUniversalSampling,0.786,0.78872,0.81036,0.81416
+Tournament Selection,0.5585777777777778,0.58556,0.56876,0.6283111111111112
+TruncationSelection,0.7482,0.47696,0.73632,0.69452

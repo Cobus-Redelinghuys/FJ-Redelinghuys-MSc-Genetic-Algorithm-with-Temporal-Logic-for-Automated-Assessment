@@ -1,0 +1,5 @@
+Hyperparameter,InfinityPool,LogicErrorPool,MemoryPool,MultiThreadedPool
+1,0.594,0.618,0.604,0.624
+2,0.15333333333333335,0.274,0.194,0.29555555555555557
+5,0.02,0.038,0.02,0.048
+10,0.02,0.02,0.02,0.02

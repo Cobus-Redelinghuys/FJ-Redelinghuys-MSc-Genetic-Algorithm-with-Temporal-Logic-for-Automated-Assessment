@@ -1,0 +1,5 @@
+Hyperparameter,InfinityPool,LogicErrorPool,MemoryPool,MultiThreadedPool
+NPointCrossOver,0.60452,0.6612,0.60116,0.71872
+OnePoint CrossOver,0.5585777777777778,0.58556,0.56876,0.6283111111111112
+SegmentedCrossOver,0.61372,0.6848,0.62748,0.69472
+UniformedCrossOver,0.561,0.59816,0.507,0.60856

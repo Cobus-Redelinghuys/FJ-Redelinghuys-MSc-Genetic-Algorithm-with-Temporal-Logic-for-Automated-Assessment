@@ -1,0 +1,48 @@
+nproc is 4
+cnode0916.cm.cluster
+cnode0916.cm.cluster
+cnode0916.cm.cluster
+cnode0916.cm.cluster
+make -C ./2024_07_11_10_34_32/mutationProp_0.0/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_0.0'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_0.0'
+make -C ./2024_07_11_10_34_32/mutationProp_0.25/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_0.25'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_0.25'
+make -C ./2024_07_11_10_34_32/mutationProp_0.75/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_0.75'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_0.75'
+make -C ./2024_07_11_10_34_32/mutationProp_1.0/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_1.0'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/mutationProp_1.0'
+make -C ./2024_07_11_10_34_32/selectionMethod_RouletteSelection/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_RouletteSelection'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_RouletteSelection'
+make -C ./2024_07_11_10_34_32/selectionMethod_StochasticUniversalSampling/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_StochasticUniversalSampling'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_StochasticUniversalSampling'
+make -C ./2024_07_11_10_34_32/selectionMethod_ExponentialRankSelection/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_ExponentialRankSelection'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_ExponentialRankSelection'
+make -C ./2024_07_11_10_34_32/selectionMethod_TruncationSelection/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_TruncationSelection'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_TruncationSelection'
+make -C ./2024_07_11_10_34_32/selectionMethod_LinearRankSelection/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_LinearRankSelection'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/selectionMethod_LinearRankSelection'
+make -C ./2024_07_11_10_34_32/tournamentSize_1/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/tournamentSize_1'
+java -jar GA.jar >> log.txt
+make[1]: Leaving directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/tournamentSize_1'
+make -C ./2024_07_11_10_34_32/tournamentSize_5/ || true 
+make[1]: Entering directory `/mnt/lustre/users/fredelinghuys/Pools/InfinityPool/Pool8/2024_07_11_10_34_32/tournamentSize_5'
+java -jar GA.jar >> log.txt

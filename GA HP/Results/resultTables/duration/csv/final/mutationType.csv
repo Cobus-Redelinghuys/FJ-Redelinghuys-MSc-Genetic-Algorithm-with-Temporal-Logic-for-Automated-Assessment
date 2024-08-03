@@ -1,0 +1,4 @@
+Hyperparameter,InfinityPool,LogicErrorPool,MemoryPool,MultiThreadedPool
+BitWise Inversion,27190.444444444445,6220.3,1236.1,3992.5555555555557
+RandomInversion,28407.3,6837.7,5227.3,6659.9
+SingleBitInversion,29148.4,5435.3,5153.5,5463.2
