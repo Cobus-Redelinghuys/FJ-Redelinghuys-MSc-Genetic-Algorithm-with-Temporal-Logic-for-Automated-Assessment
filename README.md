@@ -23,6 +23,7 @@ Traditional automated assessment tools (e.g., FitchFork, BOSS) rely on instructo
 ## Scope
 
 > ⚠️ GATLAM focuses on test input generation and automated correctness evaluation. Features such as plagiarism detection, grading, or student reporting interfaces are **not** included in this repository.
+
 > ⚠️ Due to the ethical clearance, none of the student code used in this article is posted on this repo.
 
 ## Where to access the different components:
@@ -31,7 +32,10 @@ Traditional automated assessment tools (e.g., FitchFork, BOSS) rely on instructo
   The GA component of GATLAM can be accessed in the GA branch.
 
 - **Interpreter**
-  An example of an interpreter can be accessed in the Interpreter, Mock_Interpreter or Real_Interpreter branches.
+  An example of an interpreter can be accessed in the Interpreter, Mock-Interpreter or Real-Interpreter branches.
 
 - **Error Pools**
-  The error pools that were used for hyperparameter tuning and comparison experiments can be found in the Error Pools branch.
+  The error pools that were used for hyperparameter tuning and comparison experiments can be found in the Error-Pools branch.
+
+- **Example Feedback**
+  An example of the feedback that was generated during experimentation with the student code can be found in the ExampleFeedback branch.
