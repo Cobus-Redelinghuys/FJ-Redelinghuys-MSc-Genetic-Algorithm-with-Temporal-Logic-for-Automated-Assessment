@@ -24,6 +24,10 @@ Traditional automated assessment tools (e.g., FitchFork, BOSS) rely on instructo
 
 > ⚠️ GATLAM focuses on test input generation and automated correctness evaluation. Features such as plagiarism detection, grading, or student reporting interfaces are **not** included in this repository.
 
-## How to Run
+## Where to access the different components:
 
-*Instructions for running GATLAM will be added here.*
+- **GA**
+The GA component of GATLAM can be accessed in the GA branch.
+
+- **Interpreter**
+An example of an interpreter can be accessed in the Interpreter branch.
